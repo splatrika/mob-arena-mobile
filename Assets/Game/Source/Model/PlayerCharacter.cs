@@ -3,16 +3,17 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class PlayerCharacter : IUpdatable, IDamagable, IHealth
+    public class PlayerCharacter : IPlayerCharacter, IUpdatable
     {
-        public bool IsDied => Health == 0;
-        public int Health { get; private set; }
+        public bool IsDied => _damagable.IsDied;
+        public int Health => _damagable.Health;
         public Vector3 Position { get; private set; }
         public Vector3 Direction { get; private set; }
 
         private readonly RegeneratableAction _shooting;
         private readonly IFriendBulletService _friendBulletService;
         private readonly ITimeScaleService _timeScaleService;
+        private readonly IDamagablePartial _damagable;
         private readonly ILogger _logger;
 
         public event Action Died;
@@ -24,19 +25,29 @@ namespace Splatrika.MobArenaMobile.Model
         public PlayerCharacter(
             PlayerCharacterConfiguration configuration,
             IFriendBulletService friendBulletService,
-            ITimeScaleService timeScaleService, ILogger logger)
+            ITimeScaleService timeScaleService,
+            ILogger logger,
+            IDamagablePartial damagable)
         {
             _friendBulletService = friendBulletService;
             _timeScaleService = timeScaleService;
             _logger = logger;
+            _damagable = damagable;
 
-            Health = configuration.Health;
             Position = configuration.Position;
             Direction = configuration.Direction;
             _shooting = new RegeneratableAction(
                 regenerationTime: configuration.ShootRegenerationTime,
                 action: Shoot,
                 timeScaleService: _timeScaleService);
+
+            var damagableConfiguration = new DamagableConfiguration(
+                lifes: configuration.Health,
+                allowedDamagers: damager => !(damager is IFriendBullet));
+            _damagable.Setup(damagableConfiguration);
+
+            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
+            _damagable.Died += () => Died?.Invoke();
         }
 
 
@@ -68,18 +79,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Damage(IDamager damager)
         {
-            if (damager is IFriendBullet)
-            {
-                return;
-            }
-            Health -= damager.DamageAmount;
-            Health = Mathf.Max(0, Health);
-            HealthUpdated?.Invoke(Health);
-            if (Health == 0)
-            {
-                _shooting.Stop();
-                Died?.Invoke();
-            }
+            _damagable.Damage(damager);
         }
 
 

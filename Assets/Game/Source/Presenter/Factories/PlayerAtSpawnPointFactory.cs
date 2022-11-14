@@ -42,11 +42,14 @@ namespace Splatrika.MobArenaMobile.Presenter
                 position: _spawnPoint.transform.position,
                 direction: Vector3.forward);
 
+            var damagable = new DamagablePartial();
+
             var character = new PlayerCharacter(
                 configuration,
                 _friendBulletService,
                 _timeScaleService,
-                _logger);
+                _logger,
+                damagable);
 
             var presenter = GameObject.Instantiate(_settings.Prefab);
             presenter.Init(character);

@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using NUnit.Framework;
 using Splatrika.MobArenaMobile.Model;
@@ -11,8 +12,11 @@ namespace Splatrika.MobArenaMobile.UnitTests
         public const int Health = 10;
 
         private PlayerCharacter _playerCharacter;
+        private PlayerCharacterConfiguration _configuration;
+        private DamagableConfiguration _damagableConfiguration;
         private Mock<IFriendBulletService> _friendBulletServiceMock;
         private Mock<ITimeScaleService> _timeScaleServiceMock;
+        private Mock<IDamagablePartial> _damagablePartialMock;
 
 
         [SetUp]
@@ -20,39 +24,43 @@ namespace Splatrika.MobArenaMobile.UnitTests
         {
             _friendBulletServiceMock = new Mock<IFriendBulletService>();
             _timeScaleServiceMock = new Mock<ITimeScaleService>();
+            _damagablePartialMock = new Mock<IDamagablePartial>();
 
             _timeScaleServiceMock.SetupGet(x => x.TimeScale)
                 .Returns(1);
 
-            var configuration = new PlayerCharacterConfiguration(
+            _damagablePartialMock
+                .Setup(x => x.Setup(It.IsAny<DamagableConfiguration>()))
+                .Callback((DamagableConfiguration configuration) =>
+                    _damagableConfiguration = configuration);
+
+            _configuration = new PlayerCharacterConfiguration(
                 health: Health,
                 shootRegenerationTime: ShootRegenerationTime,
                 position: new Vector3(1, 12),
                 direction: Vector3.left);
 
             _playerCharacter = new PlayerCharacter(
-                configuration,
+                _configuration,
                 _friendBulletServiceMock.Object,
                 _timeScaleServiceMock.Object,
-                new Mock<ILogger>().Object);
+                new Mock<ILogger>().Object,
+                _damagablePartialMock.Object);
         }
 
-        
-        [Test]
-        public void ShouldTakeDamage()
-        {
-            var damageAmount = _playerCharacter.Health / 2;
-            var bulletMock = new Mock<IDamager>();
-            bulletMock.SetupGet(x => x.DamageAmount)
-                .Returns(damageAmount);
-            var exceptedHealth = _playerCharacter.Health - damageAmount;
-            int? updatedHealth = null;
-            _playerCharacter.HealthUpdated += health => updatedHealth = health;
-            _playerCharacter.Damage(bulletMock.Object);
 
-            Assert.AreEqual(exceptedHealth, _playerCharacter.Health);
-            Assert.NotNull(updatedHealth);
-            Assert.AreEqual(exceptedHealth, updatedHealth);
+        [Test]
+        public void ShouldSetupDamagable()
+        {
+            var anotherDamager = new Mock<IDamager>().Object;
+            var friendBullet = new Mock<IFriendBullet>().Object;
+
+            Assert.AreEqual(_configuration.Health,
+                _damagableConfiguration.Health);
+            Assert.True(_damagableConfiguration
+                .AllowedDamagers.Invoke(anotherDamager));
+            Assert.False(_damagableConfiguration
+                .AllowedDamagers.Invoke(friendBullet));
         }
 
 
@@ -69,21 +77,6 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
             Assert.AreEqual(lastHealth, _playerCharacter.Health);
             Assert.False(healthUpdated);
-        }
-
-
-        [Test]
-        public void ShouldDie()
-        {
-            var bulletMock = new Mock<IDamager>();
-            bulletMock.SetupGet(x => x.DamageAmount)
-                .Returns(_playerCharacter.Health);
-            var died = false;
-            _playerCharacter.Died += () => died = true;
-            _playerCharacter.Damage(bulletMock.Object);
-
-            Assert.True(died);
-            Assert.True(_playerCharacter.IsDied);
         }
 
 
@@ -182,6 +175,31 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _playerCharacter.Update(ShootRegenerationTime / timeScale);
 
             Assert.AreEqual(1, shootCount);
+        }
+
+
+        [Test]
+        public void ShouldRaiseDied()
+        {
+            var died = false;
+            _playerCharacter.Died += () => died = true;
+            _damagablePartialMock.Raise(x => x.Died += null);
+
+            Assert.True(died);
+        }
+
+
+        [Test]
+        public void ShouldRaiseHealthUpdated()
+        {
+            int? health = null;
+            _playerCharacter.HealthUpdated += x => health = x;
+            int exceptedHealth = 23;
+            _damagablePartialMock.Raise(x => x.HealthUpdated += null,
+                exceptedHealth);
+
+            Assert.NotNull(health);
+            Assert.AreEqual(exceptedHealth, health);
         }
     }
 }
