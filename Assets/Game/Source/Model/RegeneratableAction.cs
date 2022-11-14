@@ -7,7 +7,7 @@ namespace Splatrika.MobArenaMobile.Model
         public bool Active { get; private set; }
         public bool Ready => _time >= RegenerationTime;
         public float TimeLeft => RegenerationTime - _time;
-        public float RegenerationTime { get; }
+        public float RegenerationTime { get; private set; }
         
         private float _time;
         private readonly Action _action;
@@ -23,6 +23,13 @@ namespace Splatrika.MobArenaMobile.Model
             RegenerationTime = regenerationTime;
             _time = RegenerationTime;
             _timeScaleService = timeScaleService;
+        }
+
+
+        public void Reset(float regenerationTime)
+        {
+            _time = 0;
+            RegenerationTime = regenerationTime;
         }
 
 
