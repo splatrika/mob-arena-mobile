@@ -8,6 +8,7 @@ namespace Splatrika.MobArenaMobile.Model
         public Vector3 Position { get; private set; }
 
         private bool _active;
+        private Vector3 _target;
         private Vector3[] _pathBuffer;
         private float[] _edgeLengths;
         private float _totalPathLength;
@@ -55,6 +56,7 @@ namespace Splatrika.MobArenaMobile.Model
             _speed = speed;
             _time = 0;
             _active = true;
+            _target = target;
             return true;
         }
 
@@ -72,7 +74,9 @@ namespace Splatrika.MobArenaMobile.Model
                 _time += _speed * deltaTime * _timeScaleService.TimeScale;
                 if (_time > _totalPathLength)
                 {
-                    _time = _totalPathLength;
+                    Position = _target;
+                    _active = false;
+                    return;
                 }
                 var currentEdge = GetCurrentEdge(_time,
                     out float _lengthBeforCurrentEdge);
@@ -82,11 +86,6 @@ namespace Splatrika.MobArenaMobile.Model
                 var lerpTime = (_time - _lengthBeforCurrentEdge)
                     / _edgeLengths[currentEdge];
                 Position = Vector3.Lerp(a, b, lerpTime);
-
-                if (_time == _totalPathLength)
-                {
-                    _active = false;
-                }
             }
         }
 
