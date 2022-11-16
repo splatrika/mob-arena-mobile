@@ -31,6 +31,11 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 minDistance: 3,
                 speed: 2,
                 regenerationTime: 14);
+
+            _navigationPartialMock
+               .Setup(x => x.Start(It.IsAny<Vector3>(), It.IsAny<Vector3>(),
+                   It.IsAny<float>()))
+               .Returns(true);
         }
 
 
@@ -161,7 +166,8 @@ namespace Splatrika.MobArenaMobile.UnitTests
                     startSetter.Invoke(start);
                     targetSetter.Invoke(target);
                     speedSetter.Invoke(speed);
-                });
+                })
+                .Returns(true);
         }
     }
 }

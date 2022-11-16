@@ -132,14 +132,25 @@ namespace Splatrika.MobArenaMobile.UnitTests
         [Test]
         public void ShouldRaiseMovementStarted()
         {
-            Vector3? movementDirection = null;
-            _walkingMob.MovementStarted += x => movementDirection = x;
-            var exceptedDirection = Vector3.left;
-            _followingPartialMock.Raise(x => x.MovementStarted += null,
+            bool movementStarted = false;
+            _walkingMob.MovementStarted += () => movementStarted = true;
+            _followingPartialMock.Raise(x => x.MovementStarted += null);
+
+            Assert.True(movementStarted);
+        }
+
+
+        [Test]
+        public void ShouldRaiseDirectionUpdated()
+        {
+            Vector3? updatedDirection = null;
+            _walkingMob.DirectionUpdated += x => updatedDirection = x;
+            Vector3 exceptedDirection = Vector3.left;
+            _followingPartialMock.Raise(x => x.DirectionUpdated += null,
                 exceptedDirection);
 
-            Assert.NotNull(movementDirection);
-            Assert.AreEqual(exceptedDirection, movementDirection);
+            Assert.NotNull(updatedDirection);
+            Assert.AreEqual(exceptedDirection, updatedDirection);
         }
 
 

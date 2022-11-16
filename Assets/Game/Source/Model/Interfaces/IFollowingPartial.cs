@@ -8,7 +8,8 @@ namespace Splatrika.MobArenaMobile.Model
         Vector3 Position { get; }
 
         event Action Arrived;
-        event Action<Vector3> MovementStarted;
+        event Action MovementStarted;
+        event Action<Vector3> DirectionUpdated;
         event Action MovementStopped;
 
         void Start(FollowingConfiguration configuration);

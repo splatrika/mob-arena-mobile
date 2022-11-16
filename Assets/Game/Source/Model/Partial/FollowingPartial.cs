@@ -10,14 +10,15 @@ namespace Splatrika.MobArenaMobile.Model
         private bool _started;
         private bool _regenerating;
         private float _regenerationTime;
+        private Vector3 _lastDirection;
         private FollowingConfiguration _configuration;
         private readonly INavigationPartial _navigationPartial;
         private readonly ITimeScaleService _timeScaleService;
 
         public event Action Arrived;
-        public event Action<Vector3> MovementStarted;
+        public event Action MovementStarted;
+        public event Action<Vector3> DirectionUpdated;
         public event Action MovementStopped;
-
 
         public FollowingPartial(
             INavigationPartial navigationPartial,
@@ -39,35 +40,51 @@ namespace Splatrika.MobArenaMobile.Model
         public void Start(FollowingConfiguration configuration)
         {
             _configuration = configuration;
-            _navigationPartial.Start(_configuration.Start,
-                _configuration.Target, _configuration.Speed);
-            _started = true;
+            if (_navigationPartial.Start(_configuration.Start,
+                _configuration.Target, _configuration.Speed))
+            {
+                MovementStarted?.Invoke();
+                _started = true;
+            }
         }
 
 
         public void Update(float deltaTime)
         {
             UpdateRegenerating(deltaTime);
-            UpdateMovement();
+            UpdateMovement(deltaTime);
         }
 
-        private void UpdateMovement()
+
+        private void UpdateMovement(float deltaTime)
         {
+            _navigationPartial.Update(deltaTime);
             if (!_started)
             {
                 return;
             }
+
+            var direction = _navigationPartial.Position - Position;
+            direction = direction.normalized;
+            if (_lastDirection != direction)
+            {
+                DirectionUpdated?.Invoke(direction);
+                _lastDirection = direction;
+            }
+
             Position = _navigationPartial.Position;
+
             var minDistance = _configuration.MinDistance;
             if (minDistance == 0 && Position == _configuration.Target)
             {
                 _navigationPartial.Stop();
                 Arrived?.Invoke();
             }
+
             if (minDistance != 0 &&
                 Vector3.Distance(Position, _configuration.Target) < minDistance)
             {
-                var direction = _configuration.Target - Position;
+                direction = _configuration.Target - Position;
                 direction = direction.normalized;
                 _navigationPartial.Stop();
                 _started = false;
@@ -76,6 +93,7 @@ namespace Splatrika.MobArenaMobile.Model
                 Arrived?.Invoke();
             }
         }
+
 
         private void UpdateRegenerating(float deltaTime)
         {

@@ -8,6 +8,7 @@ namespace Splatrika.MobArenaMobile.Model
         public float Speed;
         public float AtackDistance;
         public float AtackRegenerationTime;
+        public int AtackDamage;
         public int Health;
         public float WalkingRegenerationTime;
 

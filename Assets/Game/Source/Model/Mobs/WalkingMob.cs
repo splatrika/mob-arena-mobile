@@ -7,7 +7,7 @@ namespace Splatrika.MobArenaMobile.Model
     {
         public Vector3 Position => _following.Position;
         public bool IsAtacking { get; private set; }
-        public int DamageAmount { get; }
+        public int DamageAmount { get; private set; }
         public bool IsDied =>_damagable.IsDied;
         public int Health => _damagable.Health;
         public bool Active { get; private set; }
@@ -18,8 +18,9 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly RegeneratableAction _atacking;
 
         public event Action Started;
-        public event Action<Vector3> MovementStarted;
+        public event Action MovementStarted;
         public event Action MovementStopped;
+        public event Action<Vector3> DirectionUpdated;
         public event Action Atacked;
         public event Action Died;
         public event Action<int> HealthUpdated;
@@ -41,8 +42,9 @@ namespace Splatrika.MobArenaMobile.Model
                 timeScaleService: timeScaleService);
 
             _following.Arrived += OnArrived;
-            _following.MovementStarted += x => MovementStarted?.Invoke(x);
+            _following.MovementStarted += () => MovementStarted?.Invoke();
             _following.MovementStopped += () => MovementStopped?.Invoke();
+            _following.DirectionUpdated += x => DirectionUpdated?.Invoke(x);
             _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
             _damagable.Died += OnDied;
         }
@@ -56,6 +58,7 @@ namespace Splatrika.MobArenaMobile.Model
             }
 
             _atacking.Reset(configuration.AtackRegenerationTime);
+            DamageAmount = configuration.AtackDamage;
 
             var followingConfiguration = new FollowingConfiguration(
                 startPoint: configuration.StartPoint,
