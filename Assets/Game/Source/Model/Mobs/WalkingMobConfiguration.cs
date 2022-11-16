@@ -13,13 +13,19 @@ namespace Splatrika.MobArenaMobile.Model
         public float WalkingRegenerationTime;
 
         public WalkingMobConfiguration(
+            Vector3 startPoint,
             float speed,
             float atackDistance,
+            float atackRegenerationTime,
+            int atackDamage,
             int health,
             float walkingRegenerationTime)
         {
+            StartPoint = startPoint;
             Speed = speed;
             AtackDistance = atackDistance;
+            AtackRegenerationTime = atackRegenerationTime;
+            AtackDamage = atackDamage;
             Health = health;
             WalkingRegenerationTime = walkingRegenerationTime;
         }

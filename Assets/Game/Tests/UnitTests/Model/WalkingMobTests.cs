@@ -33,8 +33,11 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 _timeScaleServiceMock.Object);
 
             _configuration = new WalkingMobConfiguration(
+                startPoint: new Vector3(1, 1, 2),
                 speed: 15,
                 atackDistance: 12,
+                atackRegenerationTime: 2,
+                atackDamage: 5,
                 health: 10,
                 walkingRegenerationTime: 1.5f);
         }
