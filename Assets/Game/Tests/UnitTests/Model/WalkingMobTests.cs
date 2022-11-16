@@ -51,6 +51,17 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
+        public void ShouldBeStarted()
+        {
+            var started = false;
+            _walkingMob.Started += () => started = true;
+            _walkingMob.Start(_configuration);
+
+            Assert.True(started);
+        }
+
+
+        [Test]
         public void ShouldNotMoveWhenUnactive()
         {
             var followingUpdated = false;
@@ -190,6 +201,19 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
             Assert.NotNull(health);
             Assert.AreEqual(exceptedHealth, health);
+        }
+
+
+        [Test]
+        public void ShouldStopMovementOnDamage()
+        {
+            _walkingMob.Start(_configuration);
+            var hitted = false;
+            _followingPartialMock.Setup(x => x.Hit())
+                .Callback(() => hitted = true);
+            _damagablePartialMock.Raise(x => x.Damaged += null);
+
+            Assert.True(hitted);
         }
     }
 }

@@ -41,12 +41,14 @@ namespace Splatrika.MobArenaMobile.Model
                 action: Atack,
                 timeScaleService: timeScaleService);
 
+            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
+            _damagable.Died += OnDied;
+            _damagable.Damaged += OnDamaged;
+
             _following.Arrived += OnArrived;
             _following.MovementStarted += () => MovementStarted?.Invoke();
             _following.MovementStopped += () => MovementStopped?.Invoke();
             _following.DirectionUpdated += x => DirectionUpdated?.Invoke(x);
-            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
-            _damagable.Died += OnDied;
         }
 
 
@@ -100,6 +102,12 @@ namespace Splatrika.MobArenaMobile.Model
         {
             IsAtacking = true;
             _atacking.Start();
+        }
+
+
+        private void OnDamaged()
+        {
+            _following.Hit();
         }
 
 
