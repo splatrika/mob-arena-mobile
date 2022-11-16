@@ -12,6 +12,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         public event Action Died;
         public event Action<int> HealthUpdated;
+        public event Action Damaged;
 
 
         public void Damage(IDamager damager)
@@ -23,6 +24,7 @@ namespace Splatrika.MobArenaMobile.Model
             Health -= damager.DamageAmount;
             Health = Mathf.Max(0, Health);
             HealthUpdated?.Invoke(Health);
+            Damaged?.Invoke();
             if (Health == 0)
             {
                 Died?.Invoke();
