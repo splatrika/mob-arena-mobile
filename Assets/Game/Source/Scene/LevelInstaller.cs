@@ -26,6 +26,10 @@ namespace Splatrika.MobArenaMobile.Scene
                 .To<NavigationAdapter>()
                 .AsSingle();
 
+            Container.Bind<IBulletService>()
+                .To<FakeBulletService>()
+                .AsSingle();
+
             Container.BindInterfacesAndSelfTo<WalkingMob>()
                 .FromFactory<WalkingMob, WalkingMobFromSceneFactory>()
                 .AsSingle()
