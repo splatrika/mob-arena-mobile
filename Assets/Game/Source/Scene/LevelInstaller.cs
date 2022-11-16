@@ -34,6 +34,11 @@ namespace Splatrika.MobArenaMobile.Scene
                 .FromFactory<WalkingMob, WalkingMobFromSceneFactory>()
                 .AsSingle()
                 .NonLazy();
+
+            Container.BindInterfacesAndSelfTo<ShootingMob>()
+                .FromFactory<ShootingMob, ShootingMobFromSceneFactory>()
+                .AsSingle()
+                .NonLazy();
         }
 
 
