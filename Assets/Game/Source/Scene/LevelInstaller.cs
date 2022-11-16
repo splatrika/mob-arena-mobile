@@ -9,8 +9,8 @@ namespace Splatrika.MobArenaMobile.Scene
     {
         public override void InstallBindings()
         {
-            Container.Bind<PlayerCharacter>()
-                .FromFactory<PlayerAtSpawnPointFactory>()
+            Container.BindInterfacesAndSelfTo<PlayerCharacter>()
+                .FromFactory<PlayerCharacter, PlayerAtSpawnPointFactory>()
                 .AsSingle()
                 .NonLazy();
 
@@ -21,6 +21,15 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.Bind<IFriendBulletService>()
                 .To<FakeFriendBulletService>()
                 .AsSingle();
+
+            Container.Bind<INavigationService>()
+                .To<NavigationAdapter>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<WalkingMob>()
+                .FromFactory<WalkingMob, WalkingMobFromSceneFactory>()
+                .AsSingle()
+                .NonLazy();
         }
 
 
