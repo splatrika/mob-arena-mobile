@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public interface INavigationPartial
+    public interface INavigationPartial: IUpdatable
     {
         Vector3 Position { get; }
 
