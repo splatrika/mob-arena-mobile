@@ -28,6 +28,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         [SerializeField]
         private string _diedState;
 
+        private bool _moving;
         private int _lastHealth = 0;
         private Transform _transform;
         private ShootingMob _model;
@@ -66,14 +67,25 @@ namespace Splatrika.MobArenaMobile.Presenter
         }
 
 
+        private void Update()
+        {
+            if (_moving)
+            {
+                _transform.position = _model.Position;
+            }
+        }
+
+
         private void OnMovementStarted()
         {
+            _moving = true;
             _animator.Play(_movementState);
         }
 
 
         private void OnMovementStopped()
         {
+            _moving = false;
             _animator.Play(_idleState);
         }
 
