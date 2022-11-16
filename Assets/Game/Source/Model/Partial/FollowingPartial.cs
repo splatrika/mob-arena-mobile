@@ -77,21 +77,27 @@ namespace Splatrika.MobArenaMobile.Model
             var minDistance = _configuration.MinDistance;
             if (minDistance == 0 && Position == _configuration.Target)
             {
-                _navigationPartial.Stop();
+                StopMovement();
                 Arrived?.Invoke();
             }
-
             if (minDistance != 0 &&
                 Vector3.Distance(Position, _configuration.Target) < minDistance)
             {
                 direction = _configuration.Target - Position;
                 direction = direction.normalized;
-                _navigationPartial.Stop();
-                _started = false;
+                StopMovement();
                 Position = _configuration.Target
                     + (direction * -1 * minDistance);
                 Arrived?.Invoke();
             }
+        }
+
+
+        private void StopMovement()
+        {
+            _navigationPartial.Stop();
+            _started = false;
+            MovementStopped?.Invoke();
         }
 
 
