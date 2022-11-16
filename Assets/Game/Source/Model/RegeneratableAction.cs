@@ -51,7 +51,7 @@ namespace Splatrika.MobArenaMobile.Model
             {
                 _time += deltaTime * _timeScaleService.TimeScale;
             }
-            if (Active)
+            if (Active && _time >= RegenerationTime)
             {
                 _time = 0;
                 _action.Invoke();
