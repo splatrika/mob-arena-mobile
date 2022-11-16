@@ -11,6 +11,8 @@ namespace Splatrika.MobArenaMobile.Scene
                 .FromInstance(Debug.unityLogger);
 
             Container.BindPlayerSettings();
+
+            Container.BindNavigationSettings();
         }
     }
 }
