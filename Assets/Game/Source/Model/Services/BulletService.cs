@@ -24,6 +24,7 @@ namespace Splatrika.MobArenaMobile.Model
             _layerMask = configuration.LayerMask;
             _raycastService = raycastService;
             _timeScaleService = timeScaleService;
+            CreateObjects();
         }
 
 

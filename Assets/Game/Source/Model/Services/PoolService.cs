@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,8 +8,10 @@ namespace Splatrika.MobArenaMobile.Model
     public abstract class PoolService<TConfiguration, TModel>
         where TModel : IReusable<TConfiguration>
     {
-        public IReadOnlyList<TModel> Objects;
+        public IReadOnlyList<TModel> Objects => GetObjects();
 
+        private int _poolSize;
+        private IReadOnlyList<TModel> _readOnlyObjects;
         private List<TModel> _objects;
         private readonly ILogger _logger;
 
@@ -22,21 +25,42 @@ namespace Splatrika.MobArenaMobile.Model
 
         public PoolService(int poolSize, ILogger logger)
         {
-            _objects = new List<TModel>(poolSize);
-            for (var i = 0; i < poolSize; i++)
+            _poolSize = poolSize;
+            _logger = logger;
+        }
+
+
+        public IReadOnlyList<TModel> GetObjects()
+        {
+            if (_objects == null)
             {
-                _objects[i] = CreateInstance();
+                throw new InvalidOperationException("CreateObjects method " +
+                    "wasn't called in constructor");
+            }
+            return _readOnlyObjects;
+        }
+
+
+        protected void CreateObjects()
+        {
+            _objects = new List<TModel>(_poolSize);
+            for (var i = 0; i < _poolSize; i++)
+            {
+                _objects.Add(CreateInstance());
                 _objects[i].Activated += () => Activated?.Invoke(i);
                 _objects[i].Deactivated += () => Deactivated?.Invoke(i);
             }
-            Objects = _objects.AsReadOnly();
-
-            _logger = logger;
+            _readOnlyObjects = _objects.AsReadOnly();
         }
 
 
         public void Spawn(TConfiguration configuration)
         {
+            if (_objects == null)
+            {
+                throw new InvalidOperationException("CreateObjects method " +
+                    "wasn't called in constructor");
+            }
             var free = _objects.FirstOrDefault(x => !x.Active);
             if (free == null)
             {
