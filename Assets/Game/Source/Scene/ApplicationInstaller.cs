@@ -13,6 +13,8 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.BindPlayerSettings();
 
             Container.BindNavigationSettings();
+
+            Container.BindBulletsSettings();
         }
     }
 }
