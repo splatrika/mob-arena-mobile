@@ -26,9 +26,10 @@ namespace Splatrika.MobArenaMobile.Scene
                 .To<NavigationAdapter>()
                 .AsSingle();
 
-            Container.Bind<IBulletService>()
-                .To<FakeBulletService>()
-                .AsSingle();
+            Container.BindInterfacesAndSelfTo<BulletService>()
+                .FromFactory<BulletService, BulletServiceFactory>()
+                .AsSingle()
+                .NonLazy();
 
             Container.Bind<IRaycastService>()
                 .To<RaycastAdapter>()
