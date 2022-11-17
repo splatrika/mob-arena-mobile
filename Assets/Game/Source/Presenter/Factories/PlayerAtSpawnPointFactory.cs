@@ -36,11 +36,31 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         public PlayerCharacter Create()
         {
+            var prefab = _settings.Prefab;
+
+            if (!prefab)
+            {
+                _logger.LogError(nameof(PlayerAtSpawnPointFactory),
+                    "PlayerCharacter prefab is not assigned in PlayerSettings");
+                return null;
+            }
+
+            if (!prefab.Center)
+            {
+                _logger.LogError(nameof(PlayerAtSpawnPointFactory),
+                    "Center is not assigned in PlayerCharacter prefab");
+                return null;
+            }
+
+            var centerOffset = prefab.Center.position
+                - prefab.transform.position;
+
             var configuration = new PlayerCharacterConfiguration(
                 health: _settings.DefaultHealth,
                 shootRegenerationTime: _settings.ShootRegenerationTime,
                 position: _spawnPoint.transform.position,
-                direction: Vector3.forward);
+                direction: Vector3.forward,
+                centerOffset: centerOffset);
 
             var damagable = new DamagablePartial();
 
@@ -51,7 +71,9 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _logger,
                 damagable);
 
-            var presenter = GameObject.Instantiate(_settings.Prefab);
+            var presenter = GameObject
+                .Instantiate(_settings.Prefab)
+                .Presenter;
             presenter.Init(character);
 
             return character;

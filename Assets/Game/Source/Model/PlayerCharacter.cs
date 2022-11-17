@@ -9,6 +9,8 @@ namespace Splatrika.MobArenaMobile.Model
         public int Health => _damagable.Health;
         public Vector3 Position { get; private set; }
         public Vector3 Direction { get; private set; }
+        public Vector3 CenterOffset { get; }
+        public Vector3 Center => Position + CenterOffset;
 
         private readonly RegeneratableAction _shooting;
         private readonly IFriendBulletService _friendBulletService;
@@ -36,6 +38,7 @@ namespace Splatrika.MobArenaMobile.Model
 
             Position = configuration.Position;
             Direction = configuration.Direction;
+            CenterOffset = configuration.CenterOffset;
             _shooting = new RegeneratableAction(
                 regenerationTime: configuration.ShootRegenerationTime,
                 action: Shoot,

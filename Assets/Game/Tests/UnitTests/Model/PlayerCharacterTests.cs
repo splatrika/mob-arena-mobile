@@ -38,7 +38,8 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 health: Health,
                 shootRegenerationTime: ShootRegenerationTime,
                 position: new Vector3(1, 12),
-                direction: Vector3.left);
+                direction: Vector3.left,
+                centerOffset: new Vector3(2, -3.4f));
 
             _playerCharacter = new PlayerCharacter(
                 _configuration,

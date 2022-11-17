@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95d0ac15cbbd642198900ea9d35c2da5, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 2602623359462568988, guid: fab14d279d67a4f009f0698ac9ed4e3d, type: 3}
+  _prefab: {fileID: 7908725808034362309, guid: fab14d279d67a4f009f0698ac9ed4e3d, type: 3}
   _defaultHealth: 10
   _shootRegenerationTime: 0.5
   _bulletDamage: 2
