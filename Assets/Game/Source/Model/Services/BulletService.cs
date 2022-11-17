@@ -54,7 +54,7 @@ namespace Splatrika.MobArenaMobile.Model
             for (int i = 0; i < Objects.Count; i++)
             {
                 var bullet = Objects[i];
-                if (!bullet.Active)
+                if (bullet.Active)
                 {
                     bullet.FixedUpdate(deltaTime);
                 }
