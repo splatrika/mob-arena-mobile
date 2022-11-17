@@ -30,6 +30,10 @@ namespace Splatrika.MobArenaMobile.Scene
                 .To<FakeBulletService>()
                 .AsSingle();
 
+            Container.Bind<IRaycastService>()
+                .To<RaycastAdapter>()
+                .AsSingle();
+
             Container.BindInterfacesAndSelfTo<WalkingMob>()
                 .FromFactory<WalkingMob, WalkingMobFromSceneFactory>()
                 .AsSingle()
