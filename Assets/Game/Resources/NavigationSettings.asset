@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f1ce55a4a974df0981d0db9980ccf0, type: 3}
   m_Name: NavigationSettings
   m_EditorClassIdentifier: 
-  _pathBufferSize: 10
+  _pathBufferSize: 20
