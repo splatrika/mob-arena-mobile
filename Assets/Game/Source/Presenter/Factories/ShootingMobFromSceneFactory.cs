@@ -43,6 +43,16 @@ namespace Splatrika.MobArenaMobile.Presenter
             }
 
             var mobSettings = spawnSettings.Settings;
+
+            if (!mobSettings.ShotPoint)
+            {
+                throw new NullReferenceException("ShotPoint is not assigned");
+            }
+
+            var shootPointAdapter = mobSettings.gameObject
+                .AddComponent<PositionAdapter>();
+            shootPointAdapter.Init(mobSettings.ShotPoint);
+
             var configuration = new ShootingMobConfiguration(
                 health: mobSettings.Health,
                 bulletsSpeed: mobSettings.BulletsSpeed,
@@ -51,7 +61,8 @@ namespace Splatrika.MobArenaMobile.Presenter
                 start: spawnSettings.transform.position,
                 movementSpeed: mobSettings.MovementSpeed,
                 movementRegenerationTime: mobSettings.MovementRegenerationTime,
-                shootingPosition: spawnSettings.ShootingPosition);
+                shootingPosition: spawnSettings.ShootingPosition,
+                shotPoint: shootPointAdapter);
 
             var navigationConfiguration = new NavigationConfiguration(
                 _navigationSettings.PathBufferSize);

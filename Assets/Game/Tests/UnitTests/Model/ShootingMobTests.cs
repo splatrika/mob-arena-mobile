@@ -14,6 +14,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         private Mock<IBulletService> _bulletServiceMock;
         private Mock<ITimeScaleService> _timeScaleServiceMock;
         private Mock<IPlayerCharacter> _playerCharacterMock;
+        private Mock<IPositionProvider> _shotPointMock;
 
         
         [SetUp]
@@ -24,6 +25,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _bulletServiceMock = new Mock<IBulletService>();
             _timeScaleServiceMock = new Mock<ITimeScaleService>();
             _playerCharacterMock = new Mock<IPlayerCharacter>();
+            _shotPointMock = new Mock<IPositionProvider>();
 
             _shootingMob = new ShootingMob(
                 _damagablePartialMock.Object,
@@ -40,10 +42,13 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 start: new Vector3(2, 4, -8),
                 movementSpeed: 12,
                 movementRegenerationTime: 2,
-                shootingPosition: new Vector3(2, 3, 2));
+                shootingPosition: new Vector3(2, 3, 2),
+                shotPoint: _shotPointMock.Object);
 
             _playerCharacterMock.SetupGet(x => x.Position)
                 .Returns(new Vector3(2, 33, -1));
+            _playerCharacterMock.SetupGet(x => x.CenterOffset)
+                .Returns(new Vector3(1, 1, -1));
 
             _timeScaleServiceMock.SetupGet(x => x.TimeScale)
                 .Returns(1);
@@ -134,8 +139,12 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 .Setup(x => x.Spawn(It.IsAny<BulletConfiguration>()))
                 .Callback((BulletConfiguration config) =>
                     bulletConfiguration = config);
-            var directionToPlayer =
-                _playerCharacterMock.Object.Position - _shootingMob.Position;
+            _shotPointMock.SetupGet(x => x.Position)
+                .Returns(new Vector3(1, 2.1f, -2));
+            var exceptedShotPosition = _shootingMob.ShotPoint.Position;
+            var exceptedTarget = _playerCharacterMock.Object.Position
+                + _playerCharacterMock.Object.CenterOffset;
+            var directionToPlayer = exceptedTarget - exceptedShotPosition;
             _shootingMob.Shot += () => shootsCount++;
             _followingPartialMock.Raise(x => x.Arrived += null);
             _shootingMob.Update(_configuration.GunRegenerationTime / 2);
@@ -149,7 +158,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 bulletConfiguration.Speed);
             Assert.AreEqual(_configuration.BulletsDamage,
                 bulletConfiguration.Damage);
-            Assert.AreEqual(_shootingMob.Position,
+            Assert.AreEqual(exceptedShotPosition,
                 bulletConfiguration.Position);
         }
 

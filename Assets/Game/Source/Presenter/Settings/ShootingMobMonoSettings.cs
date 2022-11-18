@@ -13,6 +13,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         public float GunRegenerationTime => _gunRegenerationTime;
         public float MovementSpeed => _movementSpeed;
         public float MovementRegenerationTime => _movementRegenerationTime;
+        public Transform ShotPoint => _shotPoint;
 
 
         [SerializeField]
@@ -28,6 +29,9 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         [SerializeField]
         private float _gunRegenerationTime;
+
+        [SerializeField]
+        private Transform _shotPoint;
 
         [Header("Movement")]
 

@@ -11,6 +11,7 @@ namespace Splatrika.MobArenaMobile.Model
         public int Health => _damagable.Health;
         public float BulletsSpeed { get; private set; }
         public int BulletsDamage { get; private set; }
+        public IPositionProvider ShotPoint { get; private set; }
 
         private readonly IDamagablePartial _damagable;
         private readonly IFollowingPartial _following;
@@ -77,6 +78,7 @@ namespace Splatrika.MobArenaMobile.Model
 
             BulletsSpeed = configuration.BulletsSpeed;
             BulletsDamage = configuration.BulletsDamage;
+            ShotPoint = configuration.ShotPoint;
 
             Active = true;
             Started?.Invoke();
@@ -116,16 +118,22 @@ namespace Splatrika.MobArenaMobile.Model
         private void OnArrived()
         {
             _shooting.Start();
+            var directionToPlayer = _playerCharacter.Center - Position;
+            directionToPlayer.y = 0;
+            DirectionUpdated?.Invoke(directionToPlayer.normalized);
             ShootingStarted?.Invoke();
         }
 
 
         private void Shoot()
         {
-            var directionToPlayer = _playerCharacter.Position - Position;
+            var shotPoint = ShotPoint.Position;
+            var playerCenter = _playerCharacter.Position
+                + _playerCharacter.CenterOffset;
+            var directionToPlayer = playerCenter - shotPoint;
 
             var configuration = new BulletConfiguration(
-                position: Position,
+                position: shotPoint,
                 direction: directionToPlayer,
                 speed: BulletsSpeed,
                 damage: BulletsDamage);
