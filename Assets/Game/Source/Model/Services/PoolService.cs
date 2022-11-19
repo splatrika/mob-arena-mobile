@@ -54,7 +54,7 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public void Spawn(TConfiguration configuration)
+        public void Spawn(TConfiguration configuration, out TModel spawned)
         {
             if (_objects == null)
             {
@@ -67,8 +67,17 @@ namespace Splatrika.MobArenaMobile.Model
                 _logger.LogError(nameof(PoolService<TConfiguration, TModel>),
                     "Object wasn't spawned because there is no free object" +
                     "in the pool");
+                spawned = default;
+                return;
             }
             free.Start(configuration);
+            spawned = free;
+        }
+
+
+        public void Spawn(TConfiguration configuration)
+        {
+            Spawn(configuration, out _);
         }
     }
 }
