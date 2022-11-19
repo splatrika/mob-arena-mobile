@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class ShootingMob : IUpdatable, IDamagable, IHealth
+    public class ShootingMob : IReusable<ShootingMobConfiguration>,
+        IUpdatable, IDamagable, IHealth
     {
         public Vector3 Position => _following.Position;
         public bool Active { get; private set; }
@@ -28,7 +29,8 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action<Vector3> DirectionUpdated;
         public event Action ShootingStarted;
         public event Action Shot;
-
+        public event Action Activated;
+        public event Action Deactivated;
 
         public ShootingMob(
             IDamagablePartial damagable,
@@ -61,6 +63,11 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Start(ShootingMobConfiguration configuration)
         {
+            if (Active)
+            {
+                throw new InvalidOperationException("Already active");
+            }
+
             _shooting.Reset(configuration.GunRegenerationTime);
 
             var damagableConfiguration = new DamagableConfiguration(
@@ -82,6 +89,7 @@ namespace Splatrika.MobArenaMobile.Model
 
             Active = true;
             Started?.Invoke();
+            Activated?.Invoke();
         }
 
 
@@ -112,6 +120,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             Active = false;
             Died?.Invoke();
+            Deactivated?.Invoke();
         }
 
 

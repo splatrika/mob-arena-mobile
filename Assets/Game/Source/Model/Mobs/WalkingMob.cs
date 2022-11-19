@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class WalkingMob: IDamager, IUpdatable, IHealth, IDamagable
+    public class WalkingMob: IReusable<WalkingMobConfiguration>,
+        IDamager, IUpdatable, IHealth, IDamagable
     {
         public Vector3 Position => _following.Position;
         public bool IsAtacking { get; private set; }
@@ -24,6 +25,8 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action Atacked;
         public event Action Died;
         public event Action<int> HealthUpdated;
+        public event Action Activated;
+        public event Action Deactivated;
 
 
         public WalkingMob(
@@ -78,6 +81,7 @@ namespace Splatrika.MobArenaMobile.Model
             Active = true;
 
             Started?.Invoke();
+            Activated?.Invoke();
         }
 
 
@@ -115,6 +119,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             Active = false;
             Died?.Invoke();
+            Deactivated?.Invoke();
         }
 
 
