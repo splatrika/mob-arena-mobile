@@ -15,6 +15,10 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.BindNavigationSettings();
 
             Container.BindBulletsSettings();
+
+            Container.BindShootingMobDatabase();
+
+            Container.BindWalkingMobDatabase();
         }
     }
 }
