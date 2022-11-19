@@ -1,11 +1,14 @@
+using System;
 using Splatrika.MobArenaMobile.Model;
 using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Presenter
 {
-    public class ShootingMobPresenter : MonoBehaviour, IPresenter
+    public class ShootingMobPresenter : MonoBehaviour, IReusable<ShootingMob>,
+        IPresenter
     {
         public object Model => _model;
+        public bool Active { get; private set; }
 
         [SerializeField]
         private Animator _animator;
@@ -33,15 +36,23 @@ namespace Splatrika.MobArenaMobile.Presenter
         private Transform _transform;
         private ShootingMob _model;
 
+        public event Action Activated;
+        public event Action Deactivated;
+
 
         public void Init(ShootingMob model)
         {
-            OnDestroy();
-            _model = model;
-            _transform = transform;
+            ((IReusable<ShootingMob>)this).Start(model);
+        }
 
-            _lastHealth = _model.Health;
 
+        void IReusable<ShootingMob>.Start(ShootingMob configuration)
+        {
+            if (Active)
+            {
+                throw new InvalidOperationException("Already active");
+            }
+            _model = configuration;
             _model.MovementStarted += OnMovementStarted;
             _model.MovementStopped += OnMovementStopped;
             _model.DirectionUpdated += OnDirectionUpdated;
@@ -49,6 +60,16 @@ namespace Splatrika.MobArenaMobile.Presenter
             _model.Shot += OnShot;
             _model.HealthUpdated += OnHealthUpdated;
             _model.Died += OnDied;
+
+            if (!_transform)
+            {
+                _transform = transform;
+            }
+
+            _lastHealth = _model.Health;
+
+            Active = true;
+            Activated?.Invoke();
         }
 
 
@@ -122,6 +143,11 @@ namespace Splatrika.MobArenaMobile.Presenter
         private void OnDied()
         {
             _animator.Play(_diedState);
+
+            OnDestroy();
+            _model = null;
+            Active = false;
+            Deactivated?.Invoke();
         }
     }
 }
