@@ -1,9 +1,11 @@
+using Splatrika.MobArenaMobile.Model;
 using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Presenter
 {
     [RequireComponent(typeof(ShootingMobPresenter))]
-    public class ShootingMobMonoSettings : MonoBehaviour
+    public class ShootingMobMonoSettings : MonoBehaviour,
+        IReusablePresenterProvider
     {
         public ShootingMobPresenter Presenter
             => GetComponent<ShootingMobPresenter>();
@@ -15,6 +17,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         public float MovementRegenerationTime => _movementRegenerationTime;
         public PositionAdapter ShotPoint => _shotPoint;
 
+        IActiveStatus IReusablePresenterProvider.Presenter => Presenter;
 
         [SerializeField]
         private int _health;

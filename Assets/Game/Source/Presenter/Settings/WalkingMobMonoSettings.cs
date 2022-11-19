@@ -1,9 +1,11 @@
+using Splatrika.MobArenaMobile.Model;
 using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Presenter
 {
     [RequireComponent(typeof(WalkingMobPresenter))]
-    public class WalkingMobMonoSettings : MonoBehaviour
+    public class WalkingMobMonoSettings : MonoBehaviour,
+        IReusablePresenterProvider
     {
         public WalkingMobPresenter Presenter
             => GetComponent<WalkingMobPresenter>();
@@ -14,6 +16,8 @@ namespace Splatrika.MobArenaMobile.Presenter
         public float AtackDistance => _atackDistance;
         public float AtackRegenerationTime => _atackRegenerationTime;
         public int AtackDamage => _atackDamage;
+
+        IActiveStatus IReusablePresenterProvider.Presenter => Presenter;
 
         [SerializeField]
         private int _health;
