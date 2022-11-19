@@ -2,10 +2,8 @@ using System;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public interface IReusable<TConfiguration>
+    public interface IReusable<TConfiguration>: IActiveStatus
     {
-        bool Active { get; }
-
         event Action Activated;
         event Action Deactivated;
 
