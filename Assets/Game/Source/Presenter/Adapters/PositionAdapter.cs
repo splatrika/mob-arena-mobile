@@ -5,14 +5,18 @@ namespace Splatrika.MobArenaMobile.Presenter
 {
     public class PositionAdapter : MonoBehaviour, IPositionProvider
     {
-        public Vector3 Position => _transform.position;
+        public Vector3 Position => GetPosition();
 
         private Transform _transform;
 
 
-        public void Init(Transform point)
+        public Vector3 GetPosition()
         {
-            _transform = point;
+            if (!_transform)
+            {
+                _transform = transform;
+            }
+            return _transform.position;
         }
     }
 }
