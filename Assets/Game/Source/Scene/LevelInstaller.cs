@@ -1,5 +1,6 @@
 using Splatrika.MobArenaMobile.Model;
 using Splatrika.MobArenaMobile.Presenter;
+using Splatrika.MobArenaMobile.UI;
 using UnityEngine;
 using Zenject;
 
@@ -66,6 +67,7 @@ namespace Splatrika.MobArenaMobile.Scene
             base.Start();
 
             Container.InstantiateComponent<Updater>(new GameObject());
+            Container.InstantiateUI<LevelUI>(resourceName: "LevelUI");
         }
     }
 }
