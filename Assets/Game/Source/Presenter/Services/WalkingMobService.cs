@@ -5,7 +5,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 {
     public class WalkingMobService : MobService<WalkingMobConfiguration,
         WalkingMob, WalkingMobPool, WalkingMobMonoSettings>,
-        IWalkingMobService
+        IWalkingMobService, IUpdatable
     {
         private readonly IPlayerCharacter _playerCharacter;
         private readonly ITimeScaleService _timeScaleService;
@@ -50,6 +50,15 @@ namespace Splatrika.MobArenaMobile.Presenter
             monoSettings.Presenter.Init(mob);
 
             return mob;
+        }
+
+
+        public void Update(float deltaTime)
+        {
+            foreach (var mob in ModelPool.Objects)
+            {
+                mob.Update(deltaTime);
+            }
         }
 
 

@@ -5,7 +5,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 {
     public class ShootingMobService : MobService<ShootingMobConfiguration,
         ShootingMob, ShootingMobPool, ShootingMobMonoSettings>,
-        IShootingMobService
+        IShootingMobService, IUpdatable
     {
         private readonly ILogger _logger;
         private readonly IBulletService _bulletService;
@@ -33,6 +33,15 @@ namespace Splatrika.MobArenaMobile.Presenter
             _navigationSettings = navigationSettings;
 
             AssignModelPool(configuration);
+        }
+
+
+        public void Update(float deltaTime)
+        {
+            foreach (var mob in ModelPool.Objects)
+            {
+                mob.Update(deltaTime);
+            }
         }
 
 
