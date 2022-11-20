@@ -89,8 +89,9 @@ namespace Splatrika.MobArenaMobile.Model
             _diedMobs++;
             if (_diedMobs == _points.Length)
             {
-                Finished?.Invoke();
+                Active = false;
                 Reset();
+                Finished?.Invoke();
             }
         }
     }
