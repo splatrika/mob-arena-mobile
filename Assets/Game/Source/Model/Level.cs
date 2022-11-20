@@ -14,6 +14,7 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly ITimeScaleService _timeScaleService;
 
         public event Action Finished;
+        public event Action<int> WaveChanged;
 
 
         public Level(
@@ -66,6 +67,7 @@ namespace Splatrika.MobArenaMobile.Model
                 CurrentWave = 0;
             }
             _waves[CurrentWave].Start();
+            WaveChanged?.Invoke(CurrentWave);
         }
 
 
