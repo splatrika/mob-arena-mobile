@@ -40,6 +40,8 @@ namespace Splatrika.MobArenaMobile.Model
             {
                 _waves[0].Start();
             }
+
+            _timeScaleAcceleration = configuration.TimeScaleAcceleration;
         }
 
 
