@@ -16,3 +16,5 @@ MonoBehaviour:
   _defaultHealth: 10
   _shootRegenerationTime: 0.5
   _bulletDamage: 2
+  _bulletSpeed: 5
+  _bulletPrefab: FriendBullet
