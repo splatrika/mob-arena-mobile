@@ -38,14 +38,15 @@ namespace Splatrika.MobArenaMobile.Scene
                 .AsSingle()
                 .NonLazy();
 
+            Container.BindInterfacesAndSelfTo<FriendBulletService>()
+                .FromFactory<FriendBulletService, FriendBulletServiceFactory>()
+                .AsSingle()
+                .NonLazy();
+
             Container.BindInterfacesAndSelfTo<PlayerCharacter>()
                 .FromFactory<PlayerCharacter, PlayerAtSpawnPointFactory>()
                 .AsSingle()
                 .NonLazy();
-
-            Container.Bind<IFriendBulletService>()
-                .To<FakeFriendBulletService>()
-                .AsSingle();
 
             Container.Bind<INavigationService>()
                 .To<NavigationAdapter>()
