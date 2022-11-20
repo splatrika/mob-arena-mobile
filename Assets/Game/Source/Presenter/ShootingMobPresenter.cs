@@ -52,6 +52,8 @@ namespace Splatrika.MobArenaMobile.Presenter
             {
                 throw new InvalidOperationException("Already active");
             }
+            gameObject.SetActive(true);
+
             _model = configuration;
             _model.MovementStarted += OnMovementStarted;
             _model.MovementStopped += OnMovementStopped;
@@ -75,6 +77,15 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             Active = true;
             Activated?.Invoke();
+        }
+
+
+        private void Awake()
+        {
+            if (_model == null)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
 
