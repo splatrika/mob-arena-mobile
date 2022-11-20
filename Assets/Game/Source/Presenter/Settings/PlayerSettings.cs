@@ -9,6 +9,8 @@ namespace Splatrika.MobArenaMobile.Presenter
         public int DefaultHealth => _defaultHealth;
         public float ShootRegenerationTime => _shootRegenerationTime;
         public int BulletDamage => _bulletDamage;
+        public float BulletSpeed => _bulletSpeed;
+        public string BulletPrefab => _bulletPrefab;
 
         [SerializeField]
         private PlayerCharacterMonoSettings _prefab;
@@ -19,7 +21,28 @@ namespace Splatrika.MobArenaMobile.Presenter
         [SerializeField]
         private float _shootRegenerationTime;
 
+        [Header("Bullets")]
+
         [SerializeField]
         private int _bulletDamage;
+
+        [SerializeField]
+        private float _bulletSpeed;
+
+        [SerializeField]
+        private string _bulletPrefab;
+
+
+        private void OnValidate()
+        {
+            if (!string.IsNullOrEmpty(_bulletPrefab))
+            {
+                var bulletPrefab = Resources.Load<BulletPresenter>(_bulletPrefab);
+                if (!bulletPrefab)
+                {
+                    _bulletPrefab = "";
+                }
+            }
+        }
     }
 }
