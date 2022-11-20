@@ -9,14 +9,38 @@ namespace Splatrika.MobArenaMobile.Scene
     {
         public override void InstallBindings()
         {
+            Container.Bind<LevelMonoSettings>()
+                .To<LevelMonoSettings>()
+                .FromFactory<LevelMonoSettingsFactory>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ShootingMobService>()
+                .FromFactory<ShootingMobService, ShootingMobServiceFactory>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<WalkingMobService>()
+                .FromFactory<WalkingMobService, WalkingMobServiceFactory>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ShootingMobSpawnerFactory>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<WalkingMobSpawnerFactory>()
+                .AsSingle();
+
+            Container.Bind<ITimeScaleService>()
+                .To<TimeScaleService>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<Level>()
+                .FromFactory<Level, LevelFactory>()
+                .AsSingle()
+                .NonLazy();
+
             Container.BindInterfacesAndSelfTo<PlayerCharacter>()
                 .FromFactory<PlayerCharacter, PlayerAtSpawnPointFactory>()
                 .AsSingle()
                 .NonLazy();
-
-            Container.Bind<ITimeScaleService>()
-                .To<StaticTimeScaleService>()
-                .AsSingle();
 
             Container.Bind<IFriendBulletService>()
                 .To<FakeFriendBulletService>()
@@ -34,16 +58,6 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.Bind<IRaycastService>()
                 .To<RaycastAdapter>()
                 .AsSingle();
-
-            Container.BindInterfacesAndSelfTo<WalkingMob>()
-                .FromFactory<WalkingMob, WalkingMobFromSceneFactory>()
-                .AsSingle()
-                .NonLazy();
-
-            Container.BindInterfacesAndSelfTo<ShootingMob>()
-                .FromFactory<ShootingMob, ShootingMobFromSceneFactory>()
-                .AsSingle()
-                .NonLazy();
         }
 
 
