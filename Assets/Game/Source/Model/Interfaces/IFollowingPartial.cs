@@ -6,6 +6,7 @@ namespace Splatrika.MobArenaMobile.Model
     public interface IFollowingPartial: IUpdatable
     {
         Vector3 Position { get; }
+        bool IsMoving { get; }
 
         event Action Arrived;
         event Action MovementStarted;

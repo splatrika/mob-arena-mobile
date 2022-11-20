@@ -54,6 +54,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             Assert.AreEqual(_configuration.Start, start);
             Assert.AreEqual(_configuration.Target, target);
             Assert.AreEqual(_configuration.Speed, speed);
+            Assert.True(_followingPartial.IsMoving);
         }
 
 
@@ -67,6 +68,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _followingPartial.Hit();
 
             Assert.True(stopped);
+            Assert.False(_followingPartial.IsMoving);
         }
 
 
@@ -116,6 +118,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             Assert.True(stopped);
             Assert.True(arrived);
             Assert.AreEqual(exceptedPosition, _followingPartial.Position);
+            Assert.False(_followingPartial.IsMoving);
         }
 
 

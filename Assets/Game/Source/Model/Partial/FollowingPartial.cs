@@ -6,6 +6,7 @@ namespace Splatrika.MobArenaMobile.Model
     public class FollowingPartial : IFollowingPartial
     {
         public Vector3 Position { get; private set; }
+        public bool IsMoving => _started;
 
         private bool _started;
         private bool _regenerating;
@@ -33,7 +34,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             _regenerating = true;
             _regenerationTime = 0;
-            _navigationPartial.Stop();
+            StopMovement();
         }
 
 
