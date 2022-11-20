@@ -68,6 +68,11 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             _lastHealth = _model.Health;
 
+            if (_model.IsMoving)
+            {
+                OnMovementStarted();
+            }
+
             Active = true;
             Activated?.Invoke();
         }
@@ -90,7 +95,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         private void Update()
         {
-            if (_moving)
+            if (_model != null && _moving)
             {
                 _transform.position = _model.Position;
             }

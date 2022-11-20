@@ -53,6 +53,11 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _transform = transform;
             }
 
+            if (_model.IsMoving)
+            {
+                OnMovementStarted();
+            }
+
             Active = true;
             Activated?.Invoke();
         }
@@ -73,6 +78,10 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         private void Update()
         {
+            if (_model == null)
+            {
+                return;
+            }
             _transform.position = _model.Position;
         }
 
