@@ -89,12 +89,16 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 x => target = x,
                 x => speed = x);
 
+            var movementStarted = false;
+            _followingPartial.MovementStarted += () => movementStarted = true;
             _followingPartial.Update(_configuration.RegenerationTime / 2);
             _followingPartial.Update(_configuration.RegenerationTime / 2);
 
             Assert.AreEqual(lastPosition, start);
             Assert.AreEqual(_configuration.Target, target);
             Assert.AreEqual(_configuration.Speed, speed);
+            Assert.True(_followingPartial.IsMoving);
+            Assert.True(movementStarted);
         }
 
 

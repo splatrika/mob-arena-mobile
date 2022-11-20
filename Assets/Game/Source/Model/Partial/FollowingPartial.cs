@@ -21,6 +21,7 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action<Vector3> DirectionUpdated;
         public event Action MovementStopped;
 
+
         public FollowingPartial(
             INavigationPartial navigationPartial,
             ITimeScaleService timeScaleService)
@@ -41,12 +42,8 @@ namespace Splatrika.MobArenaMobile.Model
         public void Start(FollowingConfiguration configuration)
         {
             _configuration = configuration;
-            if (_navigationPartial.Start(_configuration.Start,
-                _configuration.Target, _configuration.Speed))
-            {
-                MovementStarted?.Invoke();
-                _started = true;
-            }
+            StartMovement(_configuration.Start, _configuration.Target,
+                _configuration.Speed);
         }
 
 
@@ -102,6 +99,16 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
+        private void StartMovement(Vector3 start, Vector3 target, float speed)
+        {
+            if (_navigationPartial.Start(start, target, speed))
+            {
+                _started = true;
+                MovementStarted?.Invoke();
+            }
+        }
+
+
         private void UpdateRegenerating(float deltaTime)
         {
             if (!_regenerating)
@@ -112,7 +119,7 @@ namespace Splatrika.MobArenaMobile.Model
             if (_regenerationTime >= _configuration.RegenerationTime)
             {
                 _regenerating = false;
-                _navigationPartial.Start(_navigationPartial.Position,
+                StartMovement(_navigationPartial.Position,
                     _configuration.Target, _configuration.Speed);
             }
         }
