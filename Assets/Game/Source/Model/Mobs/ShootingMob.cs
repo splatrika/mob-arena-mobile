@@ -13,6 +13,7 @@ namespace Splatrika.MobArenaMobile.Model
         public float BulletsSpeed { get; private set; }
         public int BulletsDamage { get; private set; }
         public IPositionProvider ShotPoint { get; private set; }
+        public bool IsMoving => _following.IsMoving;
 
         private readonly IDamagablePartial _damagable;
         private readonly IFollowingPartial _following;
@@ -31,6 +32,7 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action Shot;
         public event Action Activated;
         public event Action Deactivated;
+
 
         public ShootingMob(
             IDamagablePartial damagable,

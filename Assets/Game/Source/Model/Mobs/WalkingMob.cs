@@ -12,6 +12,7 @@ namespace Splatrika.MobArenaMobile.Model
         public bool IsDied =>_damagable.IsDied;
         public int Health => _damagable.Health;
         public bool Active { get; private set; }
+        public bool IsMoving => _following.IsMoving;
 
         private readonly IPlayerCharacter _playerCharacter;
         private readonly IFollowingPartial _following;
