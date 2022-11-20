@@ -17,13 +17,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         private List<MobKindSettings> _kinds
             = new List<MobKindSettings>();
 
-        private int _lastCount;
-
-
-        private void Awake()
-        {
-            _lastCount = _kinds.Count;
-        }
+        private int _lastCount = -1;
 
 
         private void OnValidate()
@@ -35,6 +29,10 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         private void ValidateIds()
         {
+            if (_lastCount == -1) // if just loaded
+            {
+                _lastCount = _kinds.Count;
+            }
             if (_kinds.Count == _lastCount)
             {
                 return;
