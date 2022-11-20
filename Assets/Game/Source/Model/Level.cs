@@ -2,37 +2,42 @@ using System;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class Level : ILevel, ITimeScaleService, IUpdatable, IDisposable
+    public class Level : ILevel, IUpdatable, IDisposable
     {
         public int WavesCount => _waves.Length;
         public int CurrentWave { get; private set; }
-        public float TimeScale { get; private set; }
         public bool IsFinished { get; private set; }
 
         private readonly float _timeScaleAcceleration;
         private readonly Wave[] _waves;
         private readonly IPlayerCharacter _playerCharacter;
+        private readonly ITimeScaleService _timeScaleService;
 
         public event Action Finished;
 
 
         public Level(
             LevelConfiguration configuration,
-            IPlayerCharacter playerCharacter)
+            IPlayerCharacter playerCharacter,
+            ITimeScaleService timeScaleService)
         {
             _playerCharacter = playerCharacter;
+            _timeScaleService = timeScaleService;
 
             _playerCharacter.Died += OnPlayerCharacterDied;
 
-            TimeScale = 1;
-
-            var _waves = new Wave[configuration.Waves.Length];
+            _waves = new Wave[configuration.Waves.Length];
             for (int i = 0; i < _waves.Length; i++)
             {
                 _waves[i] = new Wave(
                     configuration: configuration.Waves[i],
-                    timeScaleService: this);
+                    timeScaleService: timeScaleService);
                 _waves[i].Finished += OnWaveFinished;
+            }
+
+            if (_waves.Length > 0)
+            {
+                _waves[0].Start();
             }
         }
 
@@ -57,9 +62,10 @@ namespace Splatrika.MobArenaMobile.Model
             CurrentWave++;
             if (CurrentWave == _waves.Length)
             {
-                TimeScale += _timeScaleAcceleration;
+                _timeScaleService.Up(_timeScaleAcceleration);
                 CurrentWave = 0;
             }
+            _waves[CurrentWave].Start();
         }
 
 
