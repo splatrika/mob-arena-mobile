@@ -94,7 +94,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         private void Shoot()
         {
-            _friendBulletService.Spawn(Position, Direction);
+            _friendBulletService.Spawn(Center, Direction);
         }
     }
 }

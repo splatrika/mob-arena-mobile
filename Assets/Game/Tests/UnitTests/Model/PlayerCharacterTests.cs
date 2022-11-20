@@ -121,7 +121,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             Assert.NotNull(shootDirection);
             Assert.NotNull(shootPosition);
             Assert.AreEqual(_playerCharacter.Direction, shootDirection);
-            Assert.AreEqual(_playerCharacter.Position, shootPosition);
+            Assert.AreEqual(_playerCharacter.Center, shootPosition);
         }
 
 
