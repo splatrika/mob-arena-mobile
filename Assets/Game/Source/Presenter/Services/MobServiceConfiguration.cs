@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Presenter
 {
-    public class MobServiceConfiguration : MonoBehaviour
+    public class MobServiceConfiguration
     {
         // key: kindId value: size;
         public Dictionary<int, int> PresenterPoolsSizes;

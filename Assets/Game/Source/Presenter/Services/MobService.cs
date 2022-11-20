@@ -11,17 +11,22 @@ namespace Splatrika.MobArenaMobile.Presenter
         where TModel : IReusable<TModelConfiguration>
         where TMonoSettings : MonoBehaviour, IReusablePresenterProvider
     {
-        protected TModelPool ModelPool { get; private set; }
+        protected TModelPool ModelPool => GetModelPool();
 
         private Dictionary<int, TMonoSettings[]> _presenterPool;
         private readonly ILogger _logger;
+        private TModelPool _modelPool;
 
         protected abstract TModelPool CreateModelPool(int poolSize);
 
 
         public MobService(
-            MobServiceConfiguration configuration)
+            MobServiceConfiguration configuration,
+            ILogger logger)
         {
+            _presenterPool = new Dictionary<int, TMonoSettings[]>();
+            _logger = logger;
+
             foreach (var kind in configuration.MobKinds)
             {
                 if (!configuration.PresenterPoolsSizes.ContainsKey(kind.KindId))
@@ -45,18 +50,39 @@ namespace Splatrika.MobArenaMobile.Presenter
                         GameObject.Instantiate(prefab);
                 }
             }
+        }
 
-            ModelPool = CreateModelPool(configuration.ModelPoolSize);
+
+        protected TModelPool GetModelPool()
+        {
+            if (_modelPool == null)
+            {
+                throw new InvalidOperationException(
+                    "AssingModelPool wasn't called in the constructor");
+            }
+            return _modelPool;
+        }
+
+
+        protected void AssignModelPool(MobServiceConfiguration configuration)
+        {
+            _modelPool = CreateModelPool(configuration.ModelPoolSize);
         }
 
 
         protected TMonoSettings GetMonoSettings(int kindId)
         {
+            if (!_presenterPool.ContainsKey(kindId))
+            {
+                _logger.LogError("MobService",
+                    $"There is no presenter for mobKind {kindId}");
+                return null;
+            }
             var presenterPool = _presenterPool[kindId];
             TMonoSettings monoSettings = null;
             for (var i = 0; i < presenterPool.Length; i++)
             {
-                if (presenterPool[i].Presenter.Active)
+                if (!presenterPool[i].Presenter.Active)
                 {
                     monoSettings = presenterPool[i];
                     break;

@@ -15,19 +15,21 @@ namespace Splatrika.MobArenaMobile.Presenter
 
 
         public WalkingMobService(
-            MobServiceConfiguration configuration,
+            WalkingMobServiceConfiguration configuration,
             IPlayerCharacter playerCharacter,
             ITimeScaleService timeScaleService,
             ILogger logger,
             INavigationService navigationService,
             NavigationSettings navigationSettings)
-            : base(configuration)
+            : base(configuration, logger)
         {
             _playerCharacter = playerCharacter;
             _timeScaleService = timeScaleService;
             _logger = logger;
             _navigationService = navigationService;
             _navigationSettings = navigationSettings;
+
+            AssignModelPool(configuration);
         }
 
 

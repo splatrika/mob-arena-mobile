@@ -16,14 +16,14 @@ namespace Splatrika.MobArenaMobile.Presenter
 
 
         public ShootingMobService(
-            MobServiceConfiguration configuration,
+            ShootingMobServiceConfiguration configuration,
             ILogger logger,
             IBulletService bulletService,
             ITimeScaleService timeScaleService,
             IPlayerCharacter playerCharacter,
             INavigationService navigationService,
             NavigationSettings navigationSettings)
-            : base(configuration)
+            : base(configuration, logger)
         {
             _logger = logger;
             _bulletService = bulletService;
@@ -31,6 +31,8 @@ namespace Splatrika.MobArenaMobile.Presenter
             _playerCharacter = playerCharacter;
             _navigationService = navigationService;
             _navigationSettings = navigationSettings;
+
+            AssignModelPool(configuration);
         }
 
 
@@ -64,5 +66,6 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             return mob;
         }
+
     }
 }
