@@ -24,8 +24,8 @@ namespace Splatrika.MobArenaMobile.Model
                     "Value cannot be lesse than 0");
                 return;
             }
-            _logger.Log($"New timescale: {TimeScale}");
             TimeScale += value;
+            _logger.Log($"New timescale: {TimeScale}");
         }
     }
 }
