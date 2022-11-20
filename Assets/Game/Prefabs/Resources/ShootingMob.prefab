@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 7025444827092841415}
   - component: {fileID: 1855804747408330181}
   - component: {fileID: 1402970549578140156}
+  - component: {fileID: 7030776610360101437}
   m_Layer: 0
   m_Name: ShootingMob
   m_TagString: Untagged
@@ -328,12 +329,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9456553f980d440f6be2273611b5b972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 10
+  _health: 4
   _bulletsSpeed: 5
   _bulletsDamage: 1
   _gunRegenerationTime: 4
   _shotPoint: {fileID: 4813772918654500004}
-  _movementSpeed: 4
+  _movementSpeed: 1.5
   _movementRegenerationTime: 2
 --- !u!114 &1402970549578140156
 MonoBehaviour:
@@ -354,3 +355,19 @@ MonoBehaviour:
   _shootState: Shot
   _damagedState: Damaged
   _diedState: Died
+--- !u!54 &7030776610360101437
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8104858574088780884}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
