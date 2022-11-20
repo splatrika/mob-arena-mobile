@@ -30,6 +30,7 @@ namespace Splatrika.MobArenaMobile.Presenter
             _logger = logger;
             _navigationService = navigationService;
             _navigationSettings = navigationSettings;
+            CreateObjects();
         }
 
 
