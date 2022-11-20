@@ -5,7 +5,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 {
     public class LevelMonoSettings : MonoBehaviour
     {
-        public IReadOnlyCollection<WaveMonoSettings> Waves
+        public IReadOnlyList<WaveMonoSettings> Waves
             => _waves.AsReadOnly();
 
         public float TimeScaleAcceleration => _timeScaleAcceleration;
