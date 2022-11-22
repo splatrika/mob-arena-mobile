@@ -26,6 +26,7 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action Atacked;
         public event Action Died;
         public event Action<int> HealthUpdated;
+        public event Action Damaged;
         public event Action Activated;
         public event Action Deactivated;
 
@@ -113,6 +114,7 @@ namespace Splatrika.MobArenaMobile.Model
         private void OnDamaged()
         {
             _following.Hit();
+            Damaged?.Invoke();
         }
 
 

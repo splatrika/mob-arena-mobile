@@ -20,6 +20,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         public event Action Died;
         public event Action<int> HealthUpdated;
+        public event Action Damaged;
         public event Action Shot;
         public event Action<Vector3> Rotated;
 
@@ -51,6 +52,7 @@ namespace Splatrika.MobArenaMobile.Model
 
             _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
             _damagable.Died += () => Died?.Invoke();
+            _damagable.Damaged += () => Damaged?.Invoke();
         }
 
 
