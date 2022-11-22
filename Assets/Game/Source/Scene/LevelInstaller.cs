@@ -60,6 +60,10 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.Bind<IRaycastService>()
                 .To<RaycastAdapter>()
                 .AsSingle();
+
+            Container.BindInterfacesTo<ScoreService>()
+                .AsSingle()
+                .NonLazy();
         }
 
 
