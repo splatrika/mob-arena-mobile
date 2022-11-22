@@ -13,25 +13,32 @@ namespace Splatrika.MobArenaMobile.UI
         private NumberView _waveView;
 
         [SerializeField]
+        private NumberView _scoreView;
+
+        [SerializeField]
         private JoystickControl _playerControl;
 
         private IPlayerCharacter _playerCharacter;
         private ILevel _level;
         private ILogger _logger;
+        private IScoreService _scoreService;
 
 
         [Inject]
         public void Init(
             IPlayerCharacter playerCharacter,
             ILevel level,
-            ILogger logger)
+            ILogger logger,
+            IScoreService scoreService)
         {
             _playerCharacter = playerCharacter;
             _level = level;
             _logger = logger;
+            _scoreService = scoreService;
 
             _playerCharacter.HealthUpdated += OnPlayerHealthUpdated;
             _level.WaveChanged += OnLevelWaveChanged;
+            _scoreService.Updated += OnScoreUpdate;
 
             OnPlayerHealthUpdated(_playerCharacter.Health);
             OnLevelWaveChanged(_level.CurrentWave);
@@ -54,6 +61,7 @@ namespace Splatrika.MobArenaMobile.UI
         {
             _playerCharacter.HealthUpdated -= OnPlayerHealthUpdated;
             _level.WaveChanged -= OnLevelWaveChanged;
+            _scoreService.Updated -= OnScoreUpdate;
 
             _playerControl.Touched -= OnJoystickTouched;
             _playerControl.Untouched -= OnJoystickUntouched;
@@ -82,6 +90,18 @@ namespace Splatrika.MobArenaMobile.UI
                 return;
             }
             _waveView.Show(wave);
+        }
+
+
+        private void OnScoreUpdate(int value)
+        {
+            if (!_scoreView)
+            {
+                _logger.LogWarning(nameof(LevelUI),
+                    "Score view is not assigned");
+                return;
+            }
+            _scoreView.Show(value);
         }
 
 
