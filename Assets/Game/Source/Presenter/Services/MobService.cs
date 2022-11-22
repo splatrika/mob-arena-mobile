@@ -6,16 +6,20 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Presenter
 {
     public abstract class MobService<TModelConfiguration, TModel, TModelPool,
-        TMonoSettings>
+        TMonoSettings> : IEnemy, IDisposable
         where TModelPool : PoolService<TModelConfiguration, TModel>
         where TModel : IReusable<TModelConfiguration>
         where TMonoSettings : MonoBehaviour, IReusablePresenterProvider
     {
+        public int RewardPoints => 0;
+
         protected TModelPool ModelPool => GetModelPool();
 
         private Dictionary<int, TMonoSettings[]> _presenterPool;
         private readonly ILogger _logger;
         private TModelPool _modelPool;
+
+        public event Action<IEnemy> Died;
 
         protected abstract TModelPool CreateModelPool(int poolSize);
 
@@ -53,6 +57,18 @@ namespace Splatrika.MobArenaMobile.Presenter
         }
 
 
+        public void Dispose()
+        {
+            foreach (var mob in _modelPool.Objects)
+            {
+                if (mob is IEnemy enemy)
+                {
+                    enemy.Died -= OnEnemyDied;
+                }
+            }
+        }
+
+
         protected TModelPool GetModelPool()
         {
             if (_modelPool == null)
@@ -67,6 +83,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         protected void AssignModelPool(MobServiceConfiguration configuration)
         {
             _modelPool = CreateModelPool(configuration.ModelPoolSize);
+            AssignEnemyEvents();
         }
 
 
@@ -95,6 +112,24 @@ namespace Splatrika.MobArenaMobile.Presenter
                 return null;
             }
             return monoSettings;
+        }
+
+
+        private void AssignEnemyEvents()
+        {
+            foreach (var mob in _modelPool.Objects)
+            {
+                if (mob is IEnemy enemy)
+                {
+                    enemy.Died += OnEnemyDied;
+                }
+            }
+        }
+
+
+        private void OnEnemyDied(IEnemy enemy)
+        {
+            Died?.Invoke(enemy);
         }
     }
 }
