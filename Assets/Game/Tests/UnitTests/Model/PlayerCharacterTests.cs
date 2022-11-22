@@ -204,17 +204,36 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
+        public void DiedCharacterShouldNotShoot()
+        {
+            _playerCharacter.StartShooting();
+            KillCharacter();
+            var shot = false;
+            _playerCharacter.Shot += () => shot = true;
+            _playerCharacter.Update(_configuration.ShootRegenerationTime);
+
+            Assert.False(shot);
+        }
+
+
+        [Test]
         public void DiedCharacterShouldNotRotate()
         {
-            _damagablePartialMock.SetupGet(x => x.IsDied)
-                .Returns(true);
-            _damagablePartialMock.Raise(x => x.Died += null);
+            KillCharacter();
 
             var rotated = false;
             _playerCharacter.Rotated += _ => rotated = true;
             _playerCharacter.SetDirection(Vector2.left);
 
             Assert.False(rotated);
+        }
+
+
+        private void KillCharacter()
+        {
+            _damagablePartialMock.SetupGet(x => x.IsDied)
+                .Returns(true);
+            _damagablePartialMock.Raise(x => x.Died += null);
         }
     }
 }

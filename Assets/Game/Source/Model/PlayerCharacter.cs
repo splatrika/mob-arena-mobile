@@ -51,7 +51,7 @@ namespace Splatrika.MobArenaMobile.Model
             _damagable.Setup(damagableConfiguration);
 
             _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
-            _damagable.Died += () => Died?.Invoke();
+            _damagable.Died += OnDied;
             _damagable.Damaged += () => Damaged?.Invoke();
         }
 
@@ -103,6 +103,13 @@ namespace Splatrika.MobArenaMobile.Model
         private void Shoot()
         {
             _friendBulletService.Spawn(Center, Direction);
+        }
+
+
+        private void OnDied()
+        {
+            StopShooting();
+            Died?.Invoke();
         }
     }
 }
