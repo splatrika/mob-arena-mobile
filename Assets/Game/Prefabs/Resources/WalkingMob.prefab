@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 2
+  _rewardPoints: 20
   _speed: 0.5
   _walkingRegenerationTime: 2
   _atackDistance: 2.2

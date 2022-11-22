@@ -330,6 +330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 4
+  _rewardPoints: 50
   _bulletsSpeed: 5
   _bulletsDamage: 1
   _gunRegenerationTime: 4
