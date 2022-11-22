@@ -1,4 +1,3 @@
-using System;
 using Moq;
 using NUnit.Framework;
 using Splatrika.MobArenaMobile.Model;
@@ -201,6 +200,21 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
             Assert.NotNull(health);
             Assert.AreEqual(exceptedHealth, health);
+        }
+
+
+        [Test]
+        public void DiedCharacterShouldNotRotate()
+        {
+            _damagablePartialMock.SetupGet(x => x.IsDied)
+                .Returns(true);
+            _damagablePartialMock.Raise(x => x.Died += null);
+
+            var rotated = false;
+            _playerCharacter.Rotated += _ => rotated = true;
+            _playerCharacter.SetDirection(Vector2.left);
+
+            Assert.False(rotated);
         }
     }
 }

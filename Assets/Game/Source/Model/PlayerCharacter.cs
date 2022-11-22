@@ -58,6 +58,12 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void SetDirection(Vector2 direction)
         {
+            if (IsDied)
+            {
+                _logger.LogWarning(nameof(PlayerCharacter),
+                    "Died player character can't rotate");
+                return;
+            }
             Direction = new Vector3(direction.x, 0, direction.y)
                 .normalized;
             Rotated?.Invoke(Direction);
