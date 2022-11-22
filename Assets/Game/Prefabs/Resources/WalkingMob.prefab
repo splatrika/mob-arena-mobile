@@ -69,8 +69,8 @@ MonoBehaviour:
   _walkingState: Walk
   _idleState: Idle
   _atackState: Atack
-  _damagedState: 
-  _diedState: 
+  _damagedState: Damaged
+  _diedState: Died
 --- !u!54 &4104273421700569687
 Rigidbody:
   m_ObjectHideFlags: 0
