@@ -10,6 +10,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         public ShootingMobPresenter Presenter
             => GetComponent<ShootingMobPresenter>();
         public int Health => _health;
+        public int RewardPoints => _rewardPoints;
         public float BulletsSpeed => _bulletsSpeed;
         public int BulletsDamage => _bulletsDamage;
         public float GunRegenerationTime => _gunRegenerationTime;
@@ -21,6 +22,9 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         [SerializeField]
         private int _health;
+
+        [SerializeField]
+        private int _rewardPoints;
 
         [Header("Shooting")]
 

@@ -67,7 +67,8 @@ namespace Splatrika.MobArenaMobile.Presenter
                 movementSpeed: monoSettings.MovementSpeed,
                 movementRegenerationTime: monoSettings.MovementRegenerationTime,
                 shootingPosition: shootingPosition,
-                shotPoint: monoSettings.ShotPoint);
+                shotPoint: monoSettings.ShotPoint,
+                rewardPoints: monoSettings.RewardPoints);
 
             ModelPool.Spawn(mobConfigration, out var mob);
 

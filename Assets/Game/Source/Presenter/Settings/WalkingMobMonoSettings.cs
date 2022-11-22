@@ -11,6 +11,7 @@ namespace Splatrika.MobArenaMobile.Presenter
             => GetComponent<WalkingMobPresenter>();
 
         public int Health => _health;
+        public int RewardPoints => _rewardPoints;
         public float Speed => _speed;
         public float WalkingRegenerationTime => _walkingRegenerationTime;
         public float AtackDistance => _atackDistance;
@@ -22,27 +23,26 @@ namespace Splatrika.MobArenaMobile.Presenter
         [SerializeField]
         private int _health;
 
+        [SerializeField]
+        private int _rewardPoints;
+
         [Header("Movement")]
 
         [SerializeField]
         private float _speed;
 
         [SerializeField]
-        [InspectorName("Regeneration Time")]
         private float _walkingRegenerationTime;
 
         [Header("Atack")]
 
         [SerializeField]
-        [InspectorName("Distance")]
         private float _atackDistance;
 
         [SerializeField]
-        [InspectorName("Regeneration Time")]
         private float _atackRegenerationTime;
 
         [SerializeField]
-        [InspectorName("Damage")]
         private int _atackDamage;
 
 

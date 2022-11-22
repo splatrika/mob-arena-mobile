@@ -44,7 +44,8 @@ namespace Splatrika.MobArenaMobile.Presenter
                 atackRegenerationTime: monoSettings.AtackRegenerationTime,
                 atackDamage: monoSettings.AtackDamage,
                 health: monoSettings.Health,
-                walkingRegenerationTime: monoSettings.WalkingRegenerationTime);
+                walkingRegenerationTime: monoSettings.WalkingRegenerationTime,
+                rewardPoints: monoSettings.RewardPoints);
 
             ModelPool.Spawn(mobConfiguration, out var mob);
             monoSettings.Presenter.Init(mob);

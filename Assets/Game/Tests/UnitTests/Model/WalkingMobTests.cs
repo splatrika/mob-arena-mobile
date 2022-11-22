@@ -39,7 +39,8 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 atackRegenerationTime: 2,
                 atackDamage: 5,
                 health: 10,
-                walkingRegenerationTime: 1.5f);
+                walkingRegenerationTime: 1.5f,
+                rewardPoints: 5);
         }
 
 

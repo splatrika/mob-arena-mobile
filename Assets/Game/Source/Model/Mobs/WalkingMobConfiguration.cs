@@ -11,6 +11,7 @@ namespace Splatrika.MobArenaMobile.Model
         public int AtackDamage;
         public int Health;
         public float WalkingRegenerationTime;
+        public int RewardPoints;
 
         public WalkingMobConfiguration(
             Vector3 startPoint,
@@ -19,7 +20,8 @@ namespace Splatrika.MobArenaMobile.Model
             float atackRegenerationTime,
             int atackDamage,
             int health,
-            float walkingRegenerationTime)
+            float walkingRegenerationTime,
+            int rewardPoints)
         {
             StartPoint = startPoint;
             Speed = speed;
@@ -28,6 +30,7 @@ namespace Splatrika.MobArenaMobile.Model
             AtackDamage = atackDamage;
             Health = health;
             WalkingRegenerationTime = walkingRegenerationTime;
+            RewardPoints = rewardPoints;
         }
     }
 }

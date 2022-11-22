@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Model
 {
     public class ShootingMob : IReusable<ShootingMobConfiguration>,
-        IUpdatable, IDamagable, IHealth
+        IUpdatable, IDamagable, IHealth, IEnemy
     {
         public Vector3 Position => _following.Position;
         public bool Active { get; private set; }
@@ -14,6 +14,7 @@ namespace Splatrika.MobArenaMobile.Model
         public int BulletsDamage { get; private set; }
         public IPositionProvider ShotPoint { get; private set; }
         public bool IsMoving => _following.IsMoving;
+        public int RewardPoints { get; private set; }
 
         private readonly IDamagablePartial _damagable;
         private readonly IFollowingPartial _following;
@@ -21,6 +22,7 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly ITimeScaleService _timeScaleService;
         private readonly IPlayerCharacter _playerCharacter;
         private readonly RegeneratableAction _shooting;
+        private Action<IEnemy> _enemyDied;
 
         public event Action Started;
         public event Action Died;
@@ -33,6 +35,12 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action Shot;
         public event Action Activated;
         public event Action Deactivated;
+        event Action<IEnemy> IEnemy.Died
+        {
+            add => _enemyDied += value;
+            remove => _enemyDied -= value;
+        }
+
 
 
         public ShootingMob(
@@ -89,6 +97,7 @@ namespace Splatrika.MobArenaMobile.Model
             BulletsSpeed = configuration.BulletsSpeed;
             BulletsDamage = configuration.BulletsDamage;
             ShotPoint = configuration.ShotPoint;
+            RewardPoints = configuration.RewardPoints;
 
             Active = true;
             Started?.Invoke();
@@ -124,6 +133,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             Active = false;
             Died?.Invoke();
+            _enemyDied?.Invoke(this);
             Deactivated?.Invoke();
         }
 

@@ -58,7 +58,8 @@ namespace Splatrika.MobArenaMobile.Presenter
                 movementSpeed: mobSettings.MovementSpeed,
                 movementRegenerationTime: mobSettings.MovementRegenerationTime,
                 shootingPosition: spawnSettings.ShootingPosition,
-                shotPoint: mobSettings.ShotPoint);
+                shotPoint: mobSettings.ShotPoint,
+                rewardPoints: mobSettings.RewardPoints);
 
             var navigationConfiguration = new NavigationConfiguration(
                 _navigationSettings.PathBufferSize);

@@ -13,6 +13,7 @@ namespace Splatrika.MobArenaMobile.Model
         public float MovementRegenerationTime;
         public Vector3 ShootingPosition;
         public IPositionProvider ShotPoint;
+        public int RewardPoints;
 
 
         public ShootingMobConfiguration(
@@ -24,7 +25,8 @@ namespace Splatrika.MobArenaMobile.Model
             float movementSpeed,
             float movementRegenerationTime,
             Vector3 shootingPosition,
-            IPositionProvider shotPoint)
+            IPositionProvider shotPoint,
+            int rewardPoints)
         {
             Health = health;
             BulletsSpeed = bulletsSpeed;
@@ -35,6 +37,7 @@ namespace Splatrika.MobArenaMobile.Model
             MovementRegenerationTime = movementRegenerationTime;
             ShootingPosition = shootingPosition;
             ShotPoint = shotPoint;
+            RewardPoints = rewardPoints;
         }
     }
 }

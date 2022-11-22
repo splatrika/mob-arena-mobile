@@ -43,7 +43,8 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 movementSpeed: 12,
                 movementRegenerationTime: 2,
                 shootingPosition: new Vector3(2, 3, 2),
-                shotPoint: _shotPointMock.Object);
+                shotPoint: _shotPointMock.Object,
+                rewardPoints: 5);
 
             _playerCharacterMock.SetupGet(x => x.Position)
                 .Returns(new Vector3(2, 33, -1));

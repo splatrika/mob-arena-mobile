@@ -10,6 +10,6 @@ namespace Splatrika.MobArenaMobile.Presenter
         public Vector3 ShootingPosition => _shootingPosition.position;
 
         [SerializeField]
-        private Transform _shootingPosition;    
+        private Transform _shootingPosition;
     }
 }

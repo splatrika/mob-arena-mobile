@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Model
 {
     public class WalkingMob: IReusable<WalkingMobConfiguration>,
-        IDamager, IUpdatable, IHealth, IDamagable
+        IDamager, IUpdatable, IHealth, IDamagable, IEnemy
     {
         public Vector3 Position => _following.Position;
         public bool IsAtacking { get; private set; }
@@ -13,11 +13,13 @@ namespace Splatrika.MobArenaMobile.Model
         public int Health => _damagable.Health;
         public bool Active { get; private set; }
         public bool IsMoving => _following.IsMoving;
+        public int RewardPoints { get; private set; }
 
         private readonly IPlayerCharacter _playerCharacter;
         private readonly IFollowingPartial _following;
         private readonly IDamagablePartial _damagable;
         private readonly RegeneratableAction _atacking;
+        private Action<IEnemy> _enemyDied;
 
         public event Action Started;
         public event Action MovementStarted;
@@ -29,6 +31,11 @@ namespace Splatrika.MobArenaMobile.Model
         public event Action Damaged;
         public event Action Activated;
         public event Action Deactivated;
+        event Action<IEnemy> IEnemy.Died
+        {
+            add => _enemyDied += value;
+            remove => _enemyDied -= value;
+        }
 
 
         public WalkingMob(
@@ -80,8 +87,9 @@ namespace Splatrika.MobArenaMobile.Model
                 allowedDamagers: damager => damager is IFriendBullet);
             _damagable.Setup(damagableConfiguration);
 
-            Active = true;
+            RewardPoints = configuration.RewardPoints;
 
+            Active = true;
             Started?.Invoke();
             Activated?.Invoke();
         }
@@ -122,6 +130,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             Active = false;
             Died?.Invoke();
+            _enemyDied?.Invoke(this);
             Deactivated?.Invoke();
         }
 

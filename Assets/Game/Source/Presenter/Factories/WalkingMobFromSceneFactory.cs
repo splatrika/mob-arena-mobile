@@ -47,7 +47,8 @@ namespace Splatrika.MobArenaMobile.Presenter
                 atackDamage: settingsFromScene.AtackDamage,
                 health: settingsFromScene.Health,
                 walkingRegenerationTime:
-                    settingsFromScene.WalkingRegenerationTime);
+                    settingsFromScene.WalkingRegenerationTime,
+                rewardPoints: settingsFromScene.RewardPoints);
 
             var navigationConfiguration = new NavigationConfiguration(
                 _navigationSettings.PathBufferSize);
