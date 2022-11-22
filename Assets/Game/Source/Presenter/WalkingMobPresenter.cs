@@ -22,6 +22,12 @@ namespace Splatrika.MobArenaMobile.Presenter
         [SerializeField]
         private string _atackState;
 
+        [SerializeField]
+        private string _damagedState;
+
+        [SerializeField]
+        private string _diedState;
+
         private WalkingMob _model;
         private Transform _transform;
 
@@ -48,6 +54,7 @@ namespace Splatrika.MobArenaMobile.Presenter
             _model.MovementStopped += OnMovementStopped;
             _model.DirectionUpdated += OnDirectionUpdated;
             _model.Atacked += OnAtacked;
+            _model.Damaged += OnDamaged;
             _model.Died += OnDied;
 
             if (!_transform)
@@ -82,6 +89,7 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _model.MovementStopped -= OnMovementStopped;
                 _model.DirectionUpdated -= OnDirectionUpdated;
                 _model.Atacked -= OnAtacked;
+                _model.Damaged -= OnDamaged;
                 _model.Died -= OnDied;
             }
         }
@@ -116,6 +124,12 @@ namespace Splatrika.MobArenaMobile.Presenter
         }
 
 
+        private void OnDamaged()
+        {
+            _animator.Play(_damagedState);
+        }
+
+
         private void OnAtacked()
         {
             _animator.Play(_atackState);
@@ -124,6 +138,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         private void OnDied()
         {
+            _animator.Play(_diedState);
             OnDestroy();
             _model = null;
             Active = false;
