@@ -30,6 +30,7 @@ namespace Splatrika.MobArenaMobile.Model
         {
             _time = 0;
             RegenerationTime = regenerationTime;
+            Stop();
         }
 
 
