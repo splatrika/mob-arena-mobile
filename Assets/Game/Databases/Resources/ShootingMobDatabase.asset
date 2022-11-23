@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5be2ac90aacbc4a2a9cc1f2dcb78fdd3, type: 3}
   m_Name: ShootingMobDatabase
   m_EditorClassIdentifier: 
-  _nextIndex: 3
+  _nextIndex: 5
   _kinds:
   - _kindId: 1
     _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     _name: TestShootingMob
     _prefab: ShootingMob
+  - _kindId: 4
+    _icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    _name: Dragon
+    _prefab: Dragon
