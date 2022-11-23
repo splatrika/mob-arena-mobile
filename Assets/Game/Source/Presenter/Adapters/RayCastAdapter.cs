@@ -22,7 +22,8 @@ namespace Splatrika.MobArenaMobile.Presenter
             var direction = to - from;
             var lenght = direction.magnitude;
             var ray = new Ray(from, direction.normalized);
-            var count = Physics.RaycastNonAlloc(ray, _buffer, lenght);
+            var count = Physics.RaycastNonAlloc(ray, _buffer, lenght,
+                layerMask);
             if (count > 0)
             {
                 var hit = _buffer[0];
