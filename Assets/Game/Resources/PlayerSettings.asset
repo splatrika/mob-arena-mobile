@@ -18,3 +18,6 @@ MonoBehaviour:
   _bulletDamage: 1
   _bulletSpeed: 20
   _bulletPrefab: FriendBullet
+  _bulletsLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
