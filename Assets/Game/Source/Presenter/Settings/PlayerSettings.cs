@@ -11,6 +11,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         public int BulletDamage => _bulletDamage;
         public float BulletSpeed => _bulletSpeed;
         public string BulletPrefab => _bulletPrefab;
+        public int BulletsLayerMask => _bulletsLayerMask.value;
 
         [SerializeField]
         private PlayerCharacterMonoSettings _prefab;
@@ -31,6 +32,9 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         [SerializeField]
         private string _bulletPrefab;
+
+        [SerializeField]
+        private LayerMask _bulletsLayerMask;
 
 
         private void OnValidate()

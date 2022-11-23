@@ -32,7 +32,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         {
             var configuration = new FriendBulletServiceConfiguration(
                 poolSize: _bulletsSettings.PoolSize,
-                layerMask: _bulletsSettings.LayerMask,
+                layerMask: _playerSettings.BulletsLayerMask,
                 bulletsLifeTime: _bulletsSettings.LifeTime,
                 speed: _playerSettings.BulletSpeed,
                 damage: _playerSettings.BulletDamage);
