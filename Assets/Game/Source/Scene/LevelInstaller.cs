@@ -80,6 +80,7 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.InstantiateUI<LevelUI>(resourceName: "LevelUI");
             Container.InstantiateUI<WaveNotificationUI>(
                 resourceName: "WaveNotificationUI");
+            Container.InstantiateUI<GameOverUI>(resourceName: "GameOverUI");
         }
     }
 }
