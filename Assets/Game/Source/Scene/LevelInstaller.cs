@@ -38,6 +38,11 @@ namespace Splatrika.MobArenaMobile.Scene
                 .AsSingle()
                 .NonLazy();
 
+            Container.BindInterfacesTo<LevelEnvironment>()
+                .FromFactory<LevelEnvironment, LevelEnvironmentFactory>()
+                .AsSingle()
+                .NonLazy();
+
             Container.BindInterfacesAndSelfTo<FriendBulletService>()
                 .FromFactory<FriendBulletService, FriendBulletServiceFactory>()
                 .AsSingle()
