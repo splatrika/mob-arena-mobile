@@ -82,6 +82,9 @@ namespace Splatrika.MobArenaMobile.Model
                 if (hitted is IDamagable damagable)
                 {
                     damagable.Damage(this);
+                }
+                if (hitted is IDamagable || hitted is ILevelEnvironment)
+                {
                     Deactivate();
                 }
             }
