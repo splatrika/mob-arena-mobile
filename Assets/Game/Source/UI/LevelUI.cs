@@ -38,6 +38,7 @@ namespace Splatrika.MobArenaMobile.UI
 
             _playerCharacter.HealthUpdated += OnPlayerHealthUpdated;
             _level.WaveChanged += OnLevelWaveChanged;
+            _level.Finished += OnLevelFinished;
             _scoreService.Updated += OnScoreUpdate;
 
             OnPlayerHealthUpdated(_playerCharacter.Health);
@@ -61,6 +62,7 @@ namespace Splatrika.MobArenaMobile.UI
         {
             _playerCharacter.HealthUpdated -= OnPlayerHealthUpdated;
             _level.WaveChanged -= OnLevelWaveChanged;
+            _level.Finished -= OnLevelFinished;
             _scoreService.Updated -= OnScoreUpdate;
 
             _playerControl.Touched -= OnJoystickTouched;
@@ -102,6 +104,12 @@ namespace Splatrika.MobArenaMobile.UI
                 return;
             }
             _scoreView.Show(value);
+        }
+
+
+        private void OnLevelFinished()
+        {
+            gameObject.SetActive(false);
         }
 
 
