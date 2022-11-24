@@ -1,3 +1,4 @@
+using Splatrika.MobArenaMobile.Model;
 using UnityEngine;
 using Zenject;
 
@@ -9,6 +10,10 @@ namespace Splatrika.MobArenaMobile.Scene
         {
             Container.Bind<ILogger>()
                 .FromInstance(Debug.unityLogger);
+
+            Container.Bind<IScenesService>()
+                .To<FakeScenesService>()
+                .AsSingle();
 
             Container.BindPlayerSettings();
 
