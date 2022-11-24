@@ -91,7 +91,7 @@ namespace Splatrika.MobArenaMobile.UI
                     "Wave view is not assigned");
                 return;
             }
-            _waveView.Show(wave);
+            _waveView.Show(_level.FinishedWays + 1);
         }
 
 

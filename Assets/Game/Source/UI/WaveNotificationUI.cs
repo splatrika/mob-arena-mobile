@@ -32,7 +32,7 @@ namespace Splatrika.MobArenaMobile.UI
 
         private void OnWaveChanged(int wave)
         {
-            _view.Show(string.Format(_messageFormat, wave + 1));
+            _view.Show(string.Format(_messageFormat, _level.FinishedWays + 1));
         }
     }
 }
