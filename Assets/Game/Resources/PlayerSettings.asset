@@ -20,4 +20,4 @@ MonoBehaviour:
   _bulletPrefab: FriendBullet
   _bulletsLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
