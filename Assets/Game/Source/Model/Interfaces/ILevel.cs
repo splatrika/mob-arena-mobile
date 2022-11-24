@@ -8,5 +8,7 @@ namespace Splatrika.MobArenaMobile.Model
         event Action<int> WaveChanged;
 
         int CurrentWave { get; }
+        int Lap { get; }
+        int FinishedWays { get; }
     }
 }

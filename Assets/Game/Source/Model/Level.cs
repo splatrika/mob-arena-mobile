@@ -6,6 +6,8 @@ namespace Splatrika.MobArenaMobile.Model
     {
         public int WavesCount => _waves.Length;
         public int CurrentWave { get; private set; }
+        public int Lap { get; private set; }
+        public int FinishedWays => Lap * WavesCount + CurrentWave;
         public bool IsFinished { get; private set; }
 
         private readonly float _timeScaleAcceleration;
@@ -67,6 +69,7 @@ namespace Splatrika.MobArenaMobile.Model
             {
                 _timeScaleService.Up(_timeScaleAcceleration);
                 CurrentWave = 0;
+                Lap++;
             }
             _waves[CurrentWave].Start();
             WaveChanged?.Invoke(CurrentWave);
