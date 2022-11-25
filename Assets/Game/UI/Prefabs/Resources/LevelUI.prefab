@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4263321856305271830
 RectTransform:
   m_ObjectHideFlags: 0
@@ -875,7 +875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _center: {fileID: 6038573569662976318}
   _stick: {fileID: 6038573568608791675}
-  _maxRadius: 207.5
+  _maxRadius: 132.3
 --- !u!1 &7374896493448139619
 GameObject:
   m_ObjectHideFlags: 0
