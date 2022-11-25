@@ -77,10 +77,17 @@ namespace Splatrika.MobArenaMobile.Scene
             base.Start();
 
             Container.InstantiateComponent<Updater>(new GameObject());
-            Container.InstantiateUI<LevelUI>(resourceName: "LevelUI");
+
+            var canvas = Container.CreateDefaultCanvas();
+            Container.InstantiateUI<LevelUI>(
+                resourceName: "LevelUI",
+                canvas: canvas);
             Container.InstantiateUI<WaveNotificationUI>(
-                resourceName: "WaveNotificationUI");
-            Container.InstantiateUI<GameOverUI>(resourceName: "GameOverUI");
+                resourceName: "WaveNotificationUI",
+                canvas: canvas);
+            Container.InstantiateUI<GameOverUI>(
+                resourceName: "GameOverUI",
+                canvas: canvas);
         }
     }
 }

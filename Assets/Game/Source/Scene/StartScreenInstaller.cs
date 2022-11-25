@@ -8,8 +8,10 @@ namespace Splatrika.MobArenaMobile.Scene
         public override void Start()
         {
             base.Start();
+            var canvas = Container.CreateDefaultCanvas();
             Container.InstantiateUI<StartScreenUI>(
-                resourceName: "StartScreenUI");
+                resourceName: "StartScreenUI",
+                canvas: canvas);
         }
     }
 }

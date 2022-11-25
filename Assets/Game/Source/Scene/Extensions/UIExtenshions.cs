@@ -7,7 +7,7 @@ namespace Splatrika.MobArenaMobile.Scene
     public static class UIExtenshions
     {
         public static void InstantiateUI<T>(this DiContainer container,
-            string resourceName) where T : MonoBehaviour
+            string resourceName, Canvas canvas) where T : MonoBehaviour
         {
             var logger = container.Resolve<ILogger>();
 
@@ -20,16 +20,10 @@ namespace Splatrika.MobArenaMobile.Scene
                 return;
             }
 
-            var canvas = GameObject.FindObjectOfType<Canvas>();
             if (!canvas)
             {
-                canvas = new GameObject("Canvas").AddComponent<Canvas>();
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            }
-
-            if (!GameObject.FindObjectOfType<EventSystem>())
-            {
-                new GameObject("EventSystem").AddComponent<EventSystem>();
+                logger.LogError(nameof(UIExtenshions), "Canvas is null");
+                return;
             }
 
             var ui = container.InstantiatePrefab(prefab);
