@@ -9,7 +9,7 @@ namespace Splatrika.MobArenaMobile.Model
         public bool Active { get; private set; }
 
         private MobSpawnPoint[] _points;
-        private IHealth[] _mobs;
+        private MobDieHandler[] _mobHalders;
         private int _diedMobs;
         private int _lastCalledPoint;
         private readonly ITimeScaleService _timeScaleService;
@@ -24,7 +24,11 @@ namespace Splatrika.MobArenaMobile.Model
             _points = configuration.SpawnPoints
                 .OrderBy(x => x.SpawnTime)
                 .ToArray();
-            _mobs = new IHealth[_points.Length];
+            _mobHalders = new MobDieHandler[_points.Length];
+            for (int i = 0; i < _mobHalders.Length; i++)
+            {
+                _mobHalders[i] = new MobDieHandler(diedCallback: OnMobDied);
+            }
 
             _timeScaleService = timeScaleService;
         }
@@ -45,6 +49,10 @@ namespace Splatrika.MobArenaMobile.Model
         public void Dispose()
         {
             Reset();
+            for (int i = 0; i < _mobHalders.Length; i++)
+            {
+                _mobHalders[i].Dispose();
+            }
         }
 
 
@@ -63,9 +71,22 @@ namespace Splatrika.MobArenaMobile.Model
                     {
                         break;
                     }
-                    _mobs[i] = _points[i].Spawn();
-                    _mobs[i].Died += OnMobDied;
+                    var mob = _points[i].Spawn();
+                    RegisterMob(mob);
                     _lastCalledPoint = i;
+                }
+            }
+        }
+
+
+        private void RegisterMob(IHealth mob)
+        {
+            for (int i = 0; i < _mobHalders.Length; i++)
+            {
+                if (_mobHalders[i].IsFree)
+                {
+                    _mobHalders[i].Register(mob);
+                    return;
                 }
             }
         }
@@ -73,10 +94,6 @@ namespace Splatrika.MobArenaMobile.Model
 
         private void Reset()
         {
-            for (int i = 0; i <= _lastCalledPoint; i++)
-            {
-                _mobs[i].Died -= OnMobDied;
-            }
             _lastCalledPoint = -1;
             _diedMobs = 0;
             Active = false;
@@ -92,6 +109,50 @@ namespace Splatrika.MobArenaMobile.Model
                 Active = false;
                 Reset();
                 Finished?.Invoke();
+            }
+        }
+
+
+        private class MobDieHandler : IDisposable
+        {
+            public bool IsFree => _registered == null;
+
+            private readonly Action _diedCallback;
+            private IHealth _registered;
+
+
+            public MobDieHandler(
+                Action diedCallback)
+            {
+                _diedCallback = diedCallback;
+            }
+
+
+            public void Dispose()
+            {
+                if (_registered != null)
+                {
+                    _registered.Died -= OnDied;
+                }
+            }
+
+
+            public void Register(IHealth health)
+            {
+                if (!IsFree)
+                {
+                    throw new InvalidOperationException("Not free");
+                }
+                _registered = health;
+                health.Died += OnDied;
+            }
+
+
+            private void OnDied()
+            {
+                _diedCallback.Invoke();
+                _registered.Died -= OnDied;
+                _registered = null;
             }
         }
     }
