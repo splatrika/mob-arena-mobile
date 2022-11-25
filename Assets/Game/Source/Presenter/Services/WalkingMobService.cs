@@ -40,9 +40,9 @@ namespace Splatrika.MobArenaMobile.Presenter
             var mobConfiguration = new WalkingMobConfiguration(
                 startPoint: position,
                 speed: monoSettings.Speed,
-                atackDistance: monoSettings.AtackDistance,
-                atackRegenerationTime: monoSettings.AtackRegenerationTime,
-                atackDamage: monoSettings.AtackDamage,
+                attackDistance: monoSettings.AttackDistance,
+                attackRegenerationTime: monoSettings.AttackRegenerationTime,
+                attackDamage: monoSettings.AttackDamage,
                 health: monoSettings.Health,
                 walkingRegenerationTime: monoSettings.WalkingRegenerationTime,
                 rewardPoints: monoSettings.RewardPoints);

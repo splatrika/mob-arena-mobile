@@ -20,7 +20,7 @@ namespace Splatrika.MobArenaMobile.Presenter
         private string _idleState;
 
         [SerializeField]
-        private string _atackState;
+        private string _attackState;
 
         [SerializeField]
         private string _damagedState;
@@ -53,7 +53,7 @@ namespace Splatrika.MobArenaMobile.Presenter
             _model.MovementStarted += OnMovementStarted;
             _model.MovementStopped += OnMovementStopped;
             _model.DirectionUpdated += OnDirectionUpdated;
-            _model.Atacked += OnAtacked;
+            _model.Attacked += OnAttacked;
             _model.Damaged += OnDamaged;
             _model.Died += OnDied;
 
@@ -88,7 +88,7 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _model.MovementStarted -= OnMovementStarted;
                 _model.MovementStopped -= OnMovementStopped;
                 _model.DirectionUpdated -= OnDirectionUpdated;
-                _model.Atacked -= OnAtacked;
+                _model.Attacked -= OnAttacked;
                 _model.Damaged -= OnDamaged;
                 _model.Died -= OnDied;
             }
@@ -130,9 +130,9 @@ namespace Splatrika.MobArenaMobile.Presenter
         }
 
 
-        private void OnAtacked()
+        private void OnAttacked()
         {
-            _animator.Play(_atackState);
+            _animator.Play(_attackState);
         }
 
 

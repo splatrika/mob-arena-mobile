@@ -7,7 +7,7 @@ namespace Splatrika.MobArenaMobile.Model
         IDamager, IUpdatable, IHealth, IDamagable, IEnemy
     {
         public Vector3 Position => _following.Position;
-        public bool IsAtacking { get; private set; }
+        public bool IsAttacking { get; private set; }
         public int DamageAmount { get; private set; }
         public bool IsDied =>_damagable.IsDied;
         public int Health => _damagable.Health;
@@ -18,14 +18,14 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly IPlayerCharacter _playerCharacter;
         private readonly IFollowingPartial _following;
         private readonly IDamagablePartial _damagable;
-        private readonly RegeneratableAction _atacking;
+        private readonly RegeneratableAction _attacking;
         private Action<IEnemy> _enemyDied;
 
         public event Action Started;
         public event Action MovementStarted;
         public event Action MovementStopped;
         public event Action<Vector3> DirectionUpdated;
-        public event Action Atacked;
+        public event Action Attacked;
         public event Action Died;
         public event Action<int> HealthUpdated;
         public event Action Damaged;
@@ -48,9 +48,9 @@ namespace Splatrika.MobArenaMobile.Model
             _following = followingPartial;
             _damagable = damagable;
 
-            _atacking = new RegeneratableAction(
+            _attacking = new RegeneratableAction(
                 regenerationTime: 0,
-                action: Atack,
+                action: Attack,
                 timeScaleService: timeScaleService);
 
             _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
@@ -71,13 +71,13 @@ namespace Splatrika.MobArenaMobile.Model
                 throw new InvalidOperationException("Already active");
             }
 
-            _atacking.Reset(configuration.AtackRegenerationTime);
-            DamageAmount = configuration.AtackDamage;
+            _attacking.Reset(configuration.AttackRegenerationTime);
+            DamageAmount = configuration.AttackDamage;
 
             var followingConfiguration = new FollowingConfiguration(
                 startPoint: configuration.StartPoint,
                 followTarget: _playerCharacter.Position,
-                minDistance: configuration.AtackDistance,
+                minDistance: configuration.AttackDistance,
                 speed: configuration.Speed,
                 regenerationTime: configuration.WalkingRegenerationTime);
             _following.Start(followingConfiguration);
@@ -108,14 +108,14 @@ namespace Splatrika.MobArenaMobile.Model
                 return;
             }
             _following.Update(deltaTime);
-            _atacking.Update(deltaTime);
+            _attacking.Update(deltaTime);
         }
 
 
         private void OnArrived()
         {
-            IsAtacking = true;
-            _atacking.Start();
+            IsAttacking = true;
+            _attacking.Start();
         }
 
 
@@ -135,10 +135,10 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        private void Atack()
+        private void Attack()
         {
             _playerCharacter.Damage(this);
-            Atacked?.Invoke();
+            Attacked?.Invoke();
         }
     }
 }

@@ -42,7 +42,6 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-
         public ShootingMob(
             IDamagablePartial damagable,
             IFollowingPartial following,

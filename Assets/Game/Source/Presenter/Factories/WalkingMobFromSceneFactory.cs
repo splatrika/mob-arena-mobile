@@ -42,9 +42,9 @@ namespace Splatrika.MobArenaMobile.Presenter
             var configuration = new WalkingMobConfiguration(
                 startPoint: settingsFromScene.transform.position,
                 speed: settingsFromScene.Speed,
-                atackDistance: settingsFromScene.AtackDistance,
-                atackRegenerationTime: settingsFromScene.AtackRegenerationTime,
-                atackDamage: settingsFromScene.AtackDamage,
+                attackDistance: settingsFromScene.AttackDistance,
+                attackRegenerationTime: settingsFromScene.AttackRegenerationTime,
+                attackDamage: settingsFromScene.AttackDamage,
                 health: settingsFromScene.Health,
                 walkingRegenerationTime:
                     settingsFromScene.WalkingRegenerationTime,

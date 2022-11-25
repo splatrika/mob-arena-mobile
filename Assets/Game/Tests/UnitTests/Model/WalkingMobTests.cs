@@ -35,9 +35,9 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _configuration = new WalkingMobConfiguration(
                 startPoint: new Vector3(1, 1, 2),
                 speed: 15,
-                atackDistance: 12,
-                atackRegenerationTime: 2,
-                atackDamage: 5,
+                attackDistance: 12,
+                attackRegenerationTime: 2,
+                attackDamage: 5,
                 health: 10,
                 walkingRegenerationTime: 1.5f,
                 rewardPoints: 5);
@@ -89,7 +89,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 followingConfiguration.Start);
             Assert.AreEqual(player.Position,
                 followingConfiguration.Target);
-            Assert.AreEqual(_configuration.AtackDistance,
+            Assert.AreEqual(_configuration.AttackDistance,
                 followingConfiguration.MinDistance);
             Assert.AreEqual(_configuration.Speed,
                 followingConfiguration.Speed);
@@ -130,7 +130,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
-        public void ShouldStartAtackingOnArriveThePlayer()
+        public void ShouldStartAttackingOnArriveThePlayer()
         {
             _walkingMob.Start(_configuration);
 
@@ -138,7 +138,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _playerCharacterMock.Setup(x => x.Damage(It.IsAny<IDamager>()))
                 .Callback((IDamager damager) => playerDamager = damager);
             _followingPartialMock.Raise(x => x.Arrived += null);
-            _walkingMob.Update(_configuration.AtackRegenerationTime);
+            _walkingMob.Update(_configuration.AttackRegenerationTime);
 
             Assert.AreEqual(_walkingMob, playerDamager);
         }

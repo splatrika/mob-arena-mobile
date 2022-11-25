@@ -14,9 +14,9 @@ namespace Splatrika.MobArenaMobile.Presenter
         public int RewardPoints => _rewardPoints;
         public float Speed => _speed;
         public float WalkingRegenerationTime => _walkingRegenerationTime;
-        public float AtackDistance => _atackDistance;
-        public float AtackRegenerationTime => _atackRegenerationTime;
-        public int AtackDamage => _atackDamage;
+        public float AttackDistance => _attackDistance;
+        public float AttackRegenerationTime => _attackRegenerationTime;
+        public int AttackDamage => _attackDamage;
 
         IActiveStatus IReusablePresenterProvider.Presenter => Presenter;
 
@@ -34,22 +34,22 @@ namespace Splatrika.MobArenaMobile.Presenter
         [SerializeField]
         private float _walkingRegenerationTime;
 
-        [Header("Atack")]
+        [Header("Attack")]
 
         [SerializeField]
-        private float _atackDistance;
+        private float _attackDistance;
 
         [SerializeField]
-        private float _atackRegenerationTime;
+        private float _attackRegenerationTime;
 
         [SerializeField]
-        private int _atackDamage;
+        private int _attackDamage;
 
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, _atackDistance);
+            Gizmos.DrawWireSphere(transform.position, _attackDistance);
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position,
                 transform.position + Vector3.forward * _speed);

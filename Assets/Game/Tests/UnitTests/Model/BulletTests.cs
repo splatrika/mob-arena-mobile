@@ -40,7 +40,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
-        public void ShouldAtackDamager()
+        public void ShouldAttackDamager()
         {
             _bullet.Start(_configuration);
 
