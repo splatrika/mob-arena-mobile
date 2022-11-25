@@ -41,7 +41,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             return new WalkingMob(_playerCharacter,
                 new FollowingPartial(navigationPartial, _timeScaleService),
-                new DamagablePartial(),
+                new DamageablePartial(),
                 _timeScaleService);
         }
     }

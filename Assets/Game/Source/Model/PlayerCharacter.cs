@@ -5,8 +5,8 @@ namespace Splatrika.MobArenaMobile.Model
 {
     public class PlayerCharacter : IPlayerCharacter, IUpdatable
     {
-        public bool IsDied => _damagable.IsDied;
-        public int Health => _damagable.Health;
+        public bool IsDied => _damageable.IsDied;
+        public int Health => _damageable.Health;
         public Vector3 Position { get; private set; }
         public Vector3 Direction { get; private set; }
         public Vector3 CenterOffset { get; }
@@ -15,7 +15,7 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly RegeneratableAction _shooting;
         private readonly IFriendBulletService _friendBulletService;
         private readonly ITimeScaleService _timeScaleService;
-        private readonly IDamagablePartial _damagable;
+        private readonly IDamageablePartial _damageable;
         private readonly ILogger _logger;
 
         public event Action Died;
@@ -30,12 +30,12 @@ namespace Splatrika.MobArenaMobile.Model
             IFriendBulletService friendBulletService,
             ITimeScaleService timeScaleService,
             ILogger logger,
-            IDamagablePartial damagable)
+            IDamageablePartial damageable)
         {
             _friendBulletService = friendBulletService;
             _timeScaleService = timeScaleService;
             _logger = logger;
-            _damagable = damagable;
+            _damageable = damageable;
 
             Position = configuration.Position;
             Direction = configuration.Direction;
@@ -45,14 +45,14 @@ namespace Splatrika.MobArenaMobile.Model
                 action: Shoot,
                 timeScaleService: _timeScaleService);
 
-            var damagableConfiguration = new DamagableConfiguration(
+            var damageableConfiguration = new DamageableConfiguration(
                 lifes: configuration.Health,
                 allowedDamagers: damager => !(damager is IFriendBullet));
-            _damagable.Setup(damagableConfiguration);
+            _damageable.Setup(damageableConfiguration);
 
-            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
-            _damagable.Died += OnDied;
-            _damagable.Damaged += () => Damaged?.Invoke();
+            _damageable.HealthUpdated += x => HealthUpdated?.Invoke(x);
+            _damageable.Died += OnDied;
+            _damageable.Damaged += () => Damaged?.Invoke();
         }
 
 
@@ -90,7 +90,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Damage(IDamager damager)
         {
-            _damagable.Damage(damager);
+            _damageable.Damage(damager);
         }
 
 

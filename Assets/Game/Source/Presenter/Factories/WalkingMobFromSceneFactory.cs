@@ -57,7 +57,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             var model = new WalkingMob(_playerCharacter,
                 new FollowingPartial(navigation, _timeScaleService),
-                new DamagablePartial(),
+                new DamageablePartial(),
                 _timeScaleService);
 
             settingsFromScene.Presenter.Init(model);

@@ -43,7 +43,7 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _logger, _timeScaleService);
 
             return new ShootingMob(
-                new DamagablePartial(),
+                new DamageablePartial(),
                 new FollowingPartial(navigationPartial, _timeScaleService),
                 _bulletService,
                 _timeScaleService,

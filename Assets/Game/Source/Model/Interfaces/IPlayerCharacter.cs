@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public interface IPlayerCharacter: IDamagable, IHealth
+    public interface IPlayerCharacter: IDamageable, IHealth
     {
         Vector3 Position { get; }
         Vector3 CenterOffset { get; }

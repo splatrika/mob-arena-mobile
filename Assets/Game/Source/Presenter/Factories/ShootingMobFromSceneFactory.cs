@@ -70,7 +70,7 @@ namespace Splatrika.MobArenaMobile.Presenter
                 _timeScaleService);
 
             var mob = new ShootingMob(
-                new DamagablePartial(),
+                new DamageablePartial(),
                 new FollowingPartial(navigation, _timeScaleService),
                 _bulletService,
                 _timeScaleService,

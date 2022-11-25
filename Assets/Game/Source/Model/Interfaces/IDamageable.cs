@@ -2,7 +2,7 @@ using System;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public interface IDamagable
+    public interface IDamageable
     {
         event Action Damaged;
 

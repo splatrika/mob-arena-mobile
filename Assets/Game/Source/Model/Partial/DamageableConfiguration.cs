@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public struct DamagableConfiguration
+    public struct DamageableConfiguration
     {
         public int Health;
         public Predicate<IDamager> AllowedDamagers;
 
-        public DamagableConfiguration(
+        public DamageableConfiguration(
             int lifes,
             Predicate<IDamager> allowedDamagers)
         {

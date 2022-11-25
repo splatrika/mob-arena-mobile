@@ -4,20 +4,20 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Model
 {
     public class WalkingMob: IReusable<WalkingMobConfiguration>,
-        IDamager, IUpdatable, IHealth, IDamagable, IEnemy
+        IDamager, IUpdatable, IHealth, IDamageable, IEnemy
     {
         public Vector3 Position => _following.Position;
         public bool IsAttacking { get; private set; }
         public int DamageAmount { get; private set; }
-        public bool IsDied =>_damagable.IsDied;
-        public int Health => _damagable.Health;
+        public bool IsDied =>_damageable.IsDied;
+        public int Health => _damageable.Health;
         public bool Active { get; private set; }
         public bool IsMoving => _following.IsMoving;
         public int RewardPoints { get; private set; }
 
         private readonly IPlayerCharacter _playerCharacter;
         private readonly IFollowingPartial _following;
-        private readonly IDamagablePartial _damagable;
+        private readonly IDamageablePartial _damageable;
         private readonly RegeneratableAction _attacking;
         private Action<IEnemy> _enemyDied;
 
@@ -41,21 +41,21 @@ namespace Splatrika.MobArenaMobile.Model
         public WalkingMob(
             IPlayerCharacter playerCharacter,
             IFollowingPartial followingPartial,
-            IDamagablePartial damagable,
+            IDamageablePartial damageable,
             ITimeScaleService timeScaleService)
         {
             _playerCharacter = playerCharacter;
             _following = followingPartial;
-            _damagable = damagable;
+            _damageable = damageable;
 
             _attacking = new RegeneratableAction(
                 regenerationTime: 0,
                 action: Attack,
                 timeScaleService: timeScaleService);
 
-            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
-            _damagable.Died += OnDied;
-            _damagable.Damaged += OnDamaged;
+            _damageable.HealthUpdated += x => HealthUpdated?.Invoke(x);
+            _damageable.Died += OnDied;
+            _damageable.Damaged += OnDamaged;
 
             _following.Arrived += OnArrived;
             _following.MovementStarted += () => MovementStarted?.Invoke();
@@ -82,10 +82,10 @@ namespace Splatrika.MobArenaMobile.Model
                 regenerationTime: configuration.WalkingRegenerationTime);
             _following.Start(followingConfiguration);
 
-            var damagableConfiguration = new DamagableConfiguration(
+            var damageableConfiguration = new DamageableConfiguration(
                 lifes: configuration.Health,
                 allowedDamagers: damager => damager is IFriendBullet);
-            _damagable.Setup(damagableConfiguration);
+            _damageable.Setup(damageableConfiguration);
 
             RewardPoints = configuration.RewardPoints;
 
@@ -97,7 +97,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Damage(IDamager damager)
         {
-            _damagable.Damage(damager);
+            _damageable.Damage(damager);
         }
 
 

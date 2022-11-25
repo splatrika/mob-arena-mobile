@@ -62,14 +62,14 @@ namespace Splatrika.MobArenaMobile.Presenter
                 direction: Vector3.forward,
                 centerOffset: centerOffset);
 
-            var damagable = new DamagablePartial();
+            var damageable = new DamageablePartial();
 
             var character = new PlayerCharacter(
                 configuration,
                 _friendBulletService,
                 _timeScaleService,
                 _logger,
-                damagable);
+                damageable);
 
             var presenter = GameObject
                 .Instantiate(_settings.Prefab)

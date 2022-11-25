@@ -9,7 +9,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
     {
         private ShootingMobConfiguration _configuration;
         private ShootingMob _shootingMob;
-        private Mock<IDamagablePartial> _damagablePartialMock;
+        private Mock<IDamageablePartial> _damageablePartialMock;
         private Mock<IFollowingPartial> _followingPartialMock;
         private Mock<IBulletService> _bulletServiceMock;
         private Mock<ITimeScaleService> _timeScaleServiceMock;
@@ -20,7 +20,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         [SetUp]
         public void Init()
         {
-            _damagablePartialMock = new Mock<IDamagablePartial>();
+            _damageablePartialMock = new Mock<IDamageablePartial>();
             _followingPartialMock = new Mock<IFollowingPartial>();
             _bulletServiceMock = new Mock<IBulletService>();
             _timeScaleServiceMock = new Mock<ITimeScaleService>();
@@ -28,7 +28,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _shotPointMock = new Mock<IPositionProvider>();
 
             _shootingMob = new ShootingMob(
-                _damagablePartialMock.Object,
+                _damageablePartialMock.Object,
                 _followingPartialMock.Object,
                 _bulletServiceMock.Object,
                 _timeScaleServiceMock.Object,
@@ -98,22 +98,22 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
-        public void ShouldSetupDamagable()
+        public void ShouldSetupDamageable()
         {
             var friendBullet = new Mock<IFriendBullet>().Object;
             var anotherDamager = new Mock<IDamager>().Object;
-            var damagableConfiguration = new DamagableConfiguration();
-            _damagablePartialMock
-                .Setup(x => x.Setup(It.IsAny<DamagableConfiguration>()))
-                .Callback((DamagableConfiguration config) =>
-                    damagableConfiguration = config);
+            var damageableConfiguration = new DamageableConfiguration();
+            _damageablePartialMock
+                .Setup(x => x.Setup(It.IsAny<DamageableConfiguration>()))
+                .Callback((DamageableConfiguration config) =>
+                    damageableConfiguration = config);
             _shootingMob.Start(_configuration);
 
             Assert.AreEqual(_configuration.Health,
-               damagableConfiguration.Health);
-            Assert.True(damagableConfiguration
+               damageableConfiguration.Health);
+            Assert.True(damageableConfiguration
                 .AllowedDamagers.Invoke(friendBullet));
-            Assert.False(damagableConfiguration
+            Assert.False(damageableConfiguration
                 .AllowedDamagers(anotherDamager));
         }
 
@@ -182,7 +182,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _shootingMob.Start(_configuration);
             var died = false;
             _shootingMob.Died += () => died = true;
-            _damagablePartialMock.Raise(x => x.Died += null);
+            _damageablePartialMock.Raise(x => x.Died += null);
 
             Assert.True(died);
         }
@@ -195,7 +195,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             int? updatedHealth = 0;
             _shootingMob.HealthUpdated += x => updatedHealth = x;
             var exceptedHealht = 10;
-            _damagablePartialMock.Raise(x => x.HealthUpdated += null,
+            _damageablePartialMock.Raise(x => x.HealthUpdated += null,
                 exceptedHealht);
 
             Assert.NotNull(updatedHealth);
@@ -249,7 +249,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             var hitted = false;
             _followingPartialMock.Setup(x => x.Hit())
                 .Callback(() => hitted = true);
-            _damagablePartialMock.Raise(x => x.Damaged += null);
+            _damageablePartialMock.Raise(x => x.Damaged += null);
 
             Assert.True(hitted);
         }

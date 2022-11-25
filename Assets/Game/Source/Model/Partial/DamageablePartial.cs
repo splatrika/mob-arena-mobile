@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class DamagablePartial : IDamagablePartial
+    public class DamageablePartial : IDamageablePartial
     {
         public bool IsDied => Health == 0;
         public int Health { get; private set; }
@@ -21,6 +21,10 @@ namespace Splatrika.MobArenaMobile.Model
             {
                 return;
             }
+            if (IsDied)
+            {
+                return;
+            }
             Health -= damager.DamageAmount;
             Health = Mathf.Max(0, Health);
             HealthUpdated?.Invoke(Health);
@@ -32,7 +36,7 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public void Setup(DamagableConfiguration configuration)
+        public void Setup(DamageableConfiguration configuration)
         {
             Health = configuration.Health;
             _allowedDamagers = configuration.AllowedDamagers;
