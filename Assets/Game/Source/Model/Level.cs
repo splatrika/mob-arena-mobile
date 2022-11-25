@@ -50,6 +50,10 @@ namespace Splatrika.MobArenaMobile.Model
         public void Dispose()
         {
             _playerCharacter.Died -= OnPlayerCharacterDied;
+            for (int i = 0; i < _waves.Length; i++)
+            {
+                _waves[i].Dispose();
+            }
         }
 
 
