@@ -68,6 +68,10 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             var delta = Mathf.Atan2(direction.x, direction.y)
                 - Mathf.Atan2(_lastDirection.x, _lastDirection.y);
+            if (delta == 0)
+            {
+                return;
+            }
             var state = delta > 0
                 ? _rotateClockwiseState
                 : _rotateCounterClockwiseState;
