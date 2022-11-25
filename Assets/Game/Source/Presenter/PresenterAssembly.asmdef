@@ -3,7 +3,8 @@
     "rootNamespace": "Splatrika.MobArenaMobile.Presenter",
     "references": [
         "GUID:977ad7b0370644489b9fd53acb2d811e",
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4"
+        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
+        "GUID:2072e12f7259847989b6f0b9e4ab7a1b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

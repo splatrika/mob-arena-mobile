@@ -1,5 +1,8 @@
 using Splatrika.MobArenaMobile.Model;
+using Splatrika.MobArenaMobile.Presenter;
+using Splatrika.MobArenaMobile.UI;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 namespace Splatrika.MobArenaMobile.Scene
@@ -12,7 +15,7 @@ namespace Splatrika.MobArenaMobile.Scene
                 .FromInstance(Debug.unityLogger);
 
             Container.Bind<IScenesService>()
-                .To<FakeScenesService>()
+                .FromFactory<ScenesServiceFactory>()
                 .AsSingle();
 
             Container.BindPlayerSettings();
@@ -24,6 +27,24 @@ namespace Splatrika.MobArenaMobile.Scene
             Container.BindShootingMobDatabase();
 
             Container.BindWalkingMobDatabase();
+
+            Container.BindLoadingSettings();
+        }
+
+
+        public override void Start()
+        {
+            base.Start();
+            Application.targetFrameRate = 60;
+
+            var globalCanvas = Container.CreateDefaultCanvas();
+            globalCanvas.sortingOrder = 1000;
+            GameObject.DontDestroyOnLoad(globalCanvas);
+
+            var loadingSettings = Container.Resolve<LoadingSettings>();
+            Container.InstantiateUI<LoadingUI>(
+                resourceName: loadingSettings.LoadingUIPrefab,
+                canvas: globalCanvas);
         }
     }
 }
