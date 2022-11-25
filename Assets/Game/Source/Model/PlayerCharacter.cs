@@ -103,6 +103,7 @@ namespace Splatrika.MobArenaMobile.Model
         private void Shoot()
         {
             _friendBulletService.Spawn(Center, Direction);
+            Shot?.Invoke();
         }
 
 
