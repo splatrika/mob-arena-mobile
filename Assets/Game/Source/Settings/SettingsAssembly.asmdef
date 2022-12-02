@@ -1,0 +1,18 @@
+{
+    "name": "SettingsAssembly",
+    "rootNamespace": "Splatrika.MobArenaMobile.Settings",
+    "references": [
+        "GUID:977ad7b0370644489b9fd53acb2d811e",
+        "GUID:84aa4cb246b89433d9ba9cac700238ad",
+        "GUID:2072e12f7259847989b6f0b9e4ab7a1b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

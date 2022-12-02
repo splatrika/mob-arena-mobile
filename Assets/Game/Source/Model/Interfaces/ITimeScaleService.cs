@@ -4,6 +4,6 @@ namespace Splatrika.MobArenaMobile.Model
     {
         public float TimeScale { get; }
 
-        void Up(float value);
+        void Up(float value); // TODO REFACT возможно инкапсулировать
     }
 }
