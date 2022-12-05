@@ -58,6 +58,14 @@ namespace Splatrika.MobArenaMobile.Model
             _damageable.Damaged -= OnDamaged;
             _damageable.HealthUpdated -= OnHealthUpdate;
             _damageable.Died -= OnDied;
+            if (_followingStrategy is IDisposable following)
+            {
+                following.Dispose();
+            }
+            if (_attackingStrategy is IDisposable attacking)
+            {
+                attacking.Dispose();
+            }
             _logger.Log($"{GetType().Name} was disposed");
         }
 
