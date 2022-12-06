@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class ShootingStrategy : IAttackingStrategy
+    public class ShootingStrategy : IAttackingStrategy, IShooting
     {
+        public bool IsGunTaken { get; private set; }
+
         private int _bulletsDamage;
         private float _bulletsSpeed;
         private IPositionProvider _shootPoint;
@@ -12,9 +14,9 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly IBulletService _bulletService;
         private readonly RegeneratingAction _shooting;
 
-        public event Action Shot;
-        public event Action<Vector3> DirectionUpdated;
-
+        public event Action GunTaken;
+        public event IShooting.ShotAction Shot;
+        public event Action GunHidden;
 
         public ShootingStrategy(
             IBulletService bulletService,
@@ -46,12 +48,16 @@ namespace Splatrika.MobArenaMobile.Model
         public void Start()
         {
             _shooting.Start();
+            IsGunTaken = true;
+            GunTaken?.Invoke();
         }
 
 
         public void Stop()
         {
             _shooting.Stop();
+            IsGunTaken = false;
+            GunHidden?.Invoke();
         }
 
 
@@ -64,13 +70,14 @@ namespace Splatrika.MobArenaMobile.Model
         private void Shoot()
         {
             var direction = _target.Position - _shootPoint.Position;
-            DirectionUpdated?.Invoke(direction);
 
             _bulletService.Spawn(new BulletConfiguration(
                 position: _shootPoint.Position,
                 direction: direction,
                 speed: _bulletsSpeed,
                 damage: _bulletsDamage));
+
+            Shot?.Invoke(direction);
         }
     }
 }
