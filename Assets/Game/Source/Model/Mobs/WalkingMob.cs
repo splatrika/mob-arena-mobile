@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class WalkingMob : Mob<WalkingMobConfiguration>
+    public class WalkingMob : Mob<WalkingMobConfiguration>, IAttacking
     {
         private readonly IPlayerCharacter _playerCharacter;
+
+        public event Action Attacked;
 
 
         public WalkingMob(
@@ -20,10 +23,12 @@ namespace Splatrika.MobArenaMobile.Model
                 logger)
         {
             _playerCharacter = playerCharacter;
+
+            ((DirectAttackStrategy)AttackingStrategy).Attacked += OnAttacked;
         }
 
 
-        protected override void OnStart(
+        protected override sealed void OnStart(
             WalkingMobConfiguration configuration,
             IFollowingStrategy following,
             IAttackingStrategy attacking)
@@ -35,6 +40,18 @@ namespace Splatrika.MobArenaMobile.Model
             ((DirectAttackStrategy)attacking).Setup(
                 configuration.Damage, _playerCharacter,
                 configuration.AttackRegenerationTime);
+        }
+
+
+        protected override sealed void OnDispose()
+        {
+            ((DirectAttackStrategy)AttackingStrategy).Attacked -= OnAttacked;
+        }
+
+
+        private void OnAttacked()
+        {
+            Attacked?.Invoke();
         }
     }
 }
