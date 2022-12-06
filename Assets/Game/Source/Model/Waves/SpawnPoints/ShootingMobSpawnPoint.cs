@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class ShootingMobSpawner : MobSpawnPoint
+    public class ShootingMobSpawnPoint : MobSpawnPoint
     {
         public int KindId { get; }
         public Vector3 SpawnPosition { get; }
@@ -11,13 +11,17 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly IShootingMobService _shootingMobService;
 
 
-        public ShootingMobSpawner(ShootingMobSpawnerConfiguration configuration,
+        public ShootingMobSpawnPoint(
+            float spawnTime,
+            int kindId,
+            Vector3 spawnPosition,
+            Vector3 shootingPosition,
             IShootingMobService shootingMobService)
-            : base(configuration.SpawnTime)
+            : base(spawnTime)
         {
-            KindId = configuration.KindId;
-            SpawnPosition = configuration.SpawnPosition;
-            ShootingPosition = configuration.ShootingPosition;
+            KindId = kindId;
+            SpawnPosition = spawnPosition;
+            ShootingPosition = shootingPosition;
 
             _shootingMobService = shootingMobService;
         }
