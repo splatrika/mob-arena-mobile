@@ -13,9 +13,9 @@ namespace Splatrika.MobArenaMobile.Settings
         public int RewardPoints => _rewardPoints;
         public float Speed => _speed;
         public float WalkingRegenerationTime => _walkingRegenerationTime;
-        public float AtackDistance => _atackDistance;
-        public float AtackRegenerationTime => _atackRegenerationTime;
-        public int AtackDamage => _atackDamage;
+        public float AttackDistance => _atackDistance;
+        public float AttackRegenerationTime => _atackRegenerationTime;
+        public int AttackDamage => _atackDamage;
 
         [SerializeField]
         private int _health;

@@ -20,7 +20,8 @@ namespace Splatrika.MobArenaMobile.Model
             float bulletsSpeed,
             int bulletsDamage,
             float gunRegenerationTime,
-            IPositionProvider shotPoint)
+            IPositionProvider shotPoint,
+            Vector3 shootingPosition)
             : base(health, position, rewardPoints)
         {
             Speed = speed;
@@ -28,6 +29,7 @@ namespace Splatrika.MobArenaMobile.Model
             BulletsDamage = bulletsDamage;
             GunRegenerationTime = gunRegenerationTime;
             ShotPoint = shotPoint;
+            ShootingPosition = shootingPosition;
         }
     }
 }
