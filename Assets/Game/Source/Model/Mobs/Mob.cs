@@ -4,17 +4,20 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Model
 {
     public abstract class Mob<TConfiguration> : IHealth, IDamageable,
-        IUpdatable, IReusable<TConfiguration>, IDisposable
+        IUpdatable, IWalking, IReusable<TConfiguration>, IDisposable
         where TConfiguration : MobConfiguration
     {
         public int RewardPoints { get; private set; }
-        public Vector3 Position => _followingStrategy.Position;
+        public Vector3 Position => FollowingStrategy.Position;
+        public Vector3 Direction { get; private set; }
+        public bool IsWalking { get; private set; }
         public bool IsDied => _damageable.IsDied;
         public int Health => _damageable.Health;
         public bool Active { get; private set; }
 
-        private IFollowingStrategy _followingStrategy;
-        private IAttackingStrategy _attackingStrategy;
+        protected IFollowingStrategy FollowingStrategy { get; private set; }
+        protected IAttackingStrategy AttackingStrategy { get; private set; }
+
         private readonly DamageablePartial _damageable;
         private readonly ILogger _logger;
 
@@ -29,6 +32,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         protected abstract void OnStart(TConfiguration configuration,
             IFollowingStrategy following, IAttackingStrategy attacking);
+        protected virtual void OnDispose() { }
 
 
         public Mob(
@@ -36,14 +40,14 @@ namespace Splatrika.MobArenaMobile.Model
             IAttackingStrategy attackingStrategy,
             ILogger logger)
         {
-            _followingStrategy = followingStrategy;
-            _attackingStrategy = attackingStrategy;
+            FollowingStrategy = followingStrategy;
+            AttackingStrategy = attackingStrategy;
             _logger = logger;
             _damageable = new DamageablePartial();
 
-            _followingStrategy.Arrived += OnArrived;
-            _followingStrategy.StartedFollowing += OnStartedFollowing;
-            _followingStrategy.DirectionUpdated += OnDirectionUpdated;
+            FollowingStrategy.Arrived += OnArrived;
+            FollowingStrategy.StartedFollowing += OnStartedFollowing;
+            FollowingStrategy.DirectionUpdated += OnDirectionUpdated;
             _damageable.Damaged += OnDamaged;
             _damageable.HealthUpdated += OnHealthUpdate;
             _damageable.Died += OnDied;
@@ -52,20 +56,21 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Dispose()
         {
-            _followingStrategy.Arrived -= OnArrived;
-            _followingStrategy.StartedFollowing -= OnStartedFollowing;
-            _followingStrategy.DirectionUpdated -= OnDirectionUpdated;
+            FollowingStrategy.Arrived -= OnArrived;
+            FollowingStrategy.StartedFollowing -= OnStartedFollowing;
+            FollowingStrategy.DirectionUpdated -= OnDirectionUpdated;
             _damageable.Damaged -= OnDamaged;
             _damageable.HealthUpdated -= OnHealthUpdate;
             _damageable.Died -= OnDied;
-            if (_followingStrategy is IDisposable following)
+            if (FollowingStrategy is IDisposable following)
             {
                 following.Dispose();
             }
-            if (_attackingStrategy is IDisposable attacking)
+            if (AttackingStrategy is IDisposable attacking)
             {
                 attacking.Dispose();
             }
+            OnDispose();
             _logger.Log($"{GetType().Name} was disposed");
         }
 
@@ -76,11 +81,11 @@ namespace Splatrika.MobArenaMobile.Model
             {
                 _logger.LogError(GetType().Name, "Already active");
             }
-            _followingStrategy.SetPosition(configuration.Position);
+            FollowingStrategy.SetPosition(configuration.Position);
             _damageable.Setup(new DamageableConfiguration(
                 lifes: configuration.Health,
                 allowedDamagers: x => x is FriendBullet));
-            OnStart(configuration, _followingStrategy, _attackingStrategy);
+            OnStart(configuration, FollowingStrategy, AttackingStrategy);
             RewardPoints = configuration.RewardPoints;
             Active = true;
             Activated?.Invoke();
@@ -95,27 +100,33 @@ namespace Splatrika.MobArenaMobile.Model
 
         public void Update(float deltaTime)
         {
-            _followingStrategy.Update(deltaTime);
-            _attackingStrategy.Update(deltaTime);
+            if (Active)
+            {
+                FollowingStrategy.Update(deltaTime);
+                AttackingStrategy.Update(deltaTime);
+            }
         }
 
 
         private void OnArrived()
         {
-            _attackingStrategy.Start();
+            AttackingStrategy.Start();
+            IsWalking = false;
             MovementStopped?.Invoke();
         }
 
 
         private void OnStartedFollowing()
         {
-            _attackingStrategy.Stop();
+            AttackingStrategy.Stop();
+            IsWalking = true;
             MovementStarted?.Invoke();
         }
 
 
         private void OnDirectionUpdated(Vector3 direction)
         {
+            Direction = direction;
             DirectionUpdated?.Invoke(direction);
         }
 
@@ -134,8 +145,8 @@ namespace Splatrika.MobArenaMobile.Model
 
         private void OnDied()
         {
-            _followingStrategy.Stop();
-            _attackingStrategy.Stop();
+            FollowingStrategy.Stop();
+            AttackingStrategy.Stop();
             Died?.Invoke();
             Active = false;
             Deactivated?.Invoke();
