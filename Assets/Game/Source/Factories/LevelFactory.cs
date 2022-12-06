@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using Splatrika.MobArenaMobile.Model;
 using Splatrika.MobArenaMobile.Settings;
 using UnityEngine;
@@ -13,16 +12,19 @@ namespace Splatrika.MobArenaMobile.Factories
         private readonly IPlayerCharacter _playerCharacter;
         private readonly ILogger _logger;
         private readonly ITimeScaleService _timeScaleService;
+        private readonly DiContainer _container;
 
 
         public LevelFactory(
             IPlayerCharacter playerCharacter,
             ILogger logger,
-            ITimeScaleService timeScaleService)
+            ITimeScaleService timeScaleService,
+            DiContainer container)
         {
             _playerCharacter = playerCharacter;
             _logger = logger;
             _timeScaleService = timeScaleService;
+            _container = container;
         }
 
 
@@ -35,8 +37,16 @@ namespace Splatrika.MobArenaMobile.Factories
                     "There is no LevelMonoSettings found on the scene");
             }
 
-            var waves = new WaveConfiguration[0];
-            // todo parse waves
+            var wavesSettings = GameObject.FindObjectsOfType<WaveMonoSettings>();
+            var waves = new WaveConfiguration[wavesSettings.Length];
+            for (int i = 0; i < wavesSettings.Length; i++)
+            {
+                var item = wavesSettings[i];
+                var spawnPoints = item.GetSpawnPoints()
+                    .Select(x => x.GetSpawnPoint(_container))
+                    .ToArray();
+                waves[i] = new WaveConfiguration(spawnPoints);
+            }
 
             var configuration = new LevelConfiguration(
                 waves, settings.TimeScaleAcceleration);
