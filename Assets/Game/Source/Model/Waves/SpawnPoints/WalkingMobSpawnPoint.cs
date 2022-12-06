@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class WalkingMobSpawner : MobSpawnPoint
+    public class WalkingMobSpawnPoint : MobSpawnPoint
     {
         public int KindId { get; }
         public Vector3 Position { get; }
@@ -10,13 +10,15 @@ namespace Splatrika.MobArenaMobile.Model
         private readonly IWalkingMobService _walkingMobService;
 
 
-        public WalkingMobSpawner(
-            WalkingMobSpawnerConfiguration configuration,
+        public WalkingMobSpawnPoint(
+            float spawnTime,
+            int kindId,
+            Vector3 position,
             IWalkingMobService walkingMobService)
-            : base(configuration.SpawnTime)
+            : base(spawnTime)
         {
-            KindId = configuration.KindId;
-            Position = configuration.Position;
+            KindId = kindId;
+            Position = position;
 
             _walkingMobService = walkingMobService;
         }

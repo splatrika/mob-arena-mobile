@@ -1,4 +1,6 @@
+using Splatrika.MobArenaMobile.Model;
 using UnityEngine;
+using Zenject;
 
 namespace Splatrika.MobArenaMobile.Settings
 {
@@ -10,5 +12,6 @@ namespace Splatrika.MobArenaMobile.Settings
         private float _spawnTime;
 
         public abstract void DrawGizmos();
+        public abstract MobSpawnPoint GetSpawnPoint(DiContainer container);
     }
 }

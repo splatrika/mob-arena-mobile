@@ -4,7 +4,7 @@ namespace Splatrika.MobArenaMobile.Settings
 {
     [CreateAssetMenu(menuName = "MobArenaMobile/Settings/WalkingMobDatabase")]
     public class WalkingMobDatabaseSettings
-        : MobKindDatabaseSettings<MonoBehaviour>
+        : MobKindDatabaseSettings<WalkingMobMonoSettings>
     {
     }
 }
