@@ -7,33 +7,33 @@ namespace Splatrika.MobArenaMobile.Model
     {
         public int Score { get; private set; }
 
-        private readonly List<IEnemy> _enemies;
+        private readonly List<IRewardProvider> _providers;
 
         public event Action<int> Updated;
 
 
-        public ScoreService(List<IEnemy> enemies)
+        public ScoreService(List<IRewardProvider> providers)
         {
-            _enemies = enemies;
-            foreach (var enemy in enemies)
+            _providers = providers;
+            foreach (var provider in providers)
             {
-                enemy.Died += OnEnemyDied;
+                provider.Rewarded += OnRewarded;
             }
         }
 
 
         public void Dispose()
         {
-            foreach (var enemy in _enemies)
+            foreach (var provider in _providers)
             {
-                enemy.Died -= OnEnemyDied;
+                provider.Rewarded -= OnRewarded;
             }
         }
 
 
-        private void OnEnemyDied(IEnemy enemy)
+        private void OnRewarded(int points)
         {
-            Score += enemy.RewardPoints;
+            Score += points;
             Updated?.Invoke(Score);
         }
     }
