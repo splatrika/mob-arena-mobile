@@ -8,13 +8,8 @@ namespace Splatrika.MobArenaMobile.Factories
 {
     public class WalkingMobService : MobService<WalkingMobMonoSettings,
         WalkingMob, WalkingMobConfiguration, WalkingMobSpawnArgs>,
-        IWalkingMobService, IEnemy
+        IWalkingMobService
     {
-        public int RewardPoints => throw new NotImplementedException();
-
-        public event Action<IEnemy> Died;
-
-
         public WalkingMobService(
             SpawnObjectServiceConfiguration<WalkingMobMonoSettings> configuration,
             DiContainer container)
