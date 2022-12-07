@@ -11,6 +11,6 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public abstract IHealth Spawn();
+        public abstract IDamageable Spawn();
     }
 }

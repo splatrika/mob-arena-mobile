@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public abstract class Mob<TConfiguration> : IHealth, IDamageable,
+    public abstract class Mob<TConfiguration> : IDamageable,
         IUpdatable, IWalking, IReusable<TConfiguration>, IDisposable
         where TConfiguration : MobConfiguration
     {
@@ -51,6 +51,8 @@ namespace Splatrika.MobArenaMobile.Model
             _damageable.Damaged += OnDamaged;
             _damageable.HealthUpdated += OnHealthUpdate;
             _damageable.Died += OnDied;
+
+            _logger.Log($"{GetType().Name} was instantiated");
         }
 
 
@@ -89,6 +91,7 @@ namespace Splatrika.MobArenaMobile.Model
             RewardPoints = configuration.RewardPoints;
             Active = true;
             Activated?.Invoke();
+            _logger.Log($"{GetType().Name} was started");
         }
 
 

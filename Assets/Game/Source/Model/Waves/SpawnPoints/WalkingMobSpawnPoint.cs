@@ -24,7 +24,7 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public override IHealth Spawn()
+        public override IDamageable Spawn()
         {
             return _walkingMobService.Spawn(KindId, Position);
         }

@@ -10,7 +10,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         private Mock<MobSpawnPoint> _spawnPoint1Mock;
         private Mock<MobSpawnPoint> _spawnPoint2Mock;
         private Mock<ITimeScaleService> _timeScaleServiceMock;
-        private Mock<IHealth> _mobMock;
+        private Mock<IDamageable> _mobMock;
         private bool _point1Called;
         private bool _point2Called;
 
@@ -20,7 +20,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         {
             _spawnPoint1Mock = new Mock<MobSpawnPoint>(2);
             _spawnPoint2Mock = new Mock<MobSpawnPoint>(5);
-            _mobMock = new Mock<IHealth>();
+            _mobMock = new Mock<IDamageable>();
             _timeScaleServiceMock = new Mock<ITimeScaleService>();
             _point1Called = false;
             _point2Called = false;

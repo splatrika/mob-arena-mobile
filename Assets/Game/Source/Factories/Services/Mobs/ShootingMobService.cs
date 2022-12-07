@@ -16,7 +16,7 @@ namespace Splatrika.MobArenaMobile.Factories
         {
         }
 
-        public IHealth Spawn(int kindId, Vector3 position,
+        public IDamageable Spawn(int kindId, Vector3 position,
             Vector3 shootingPosition)
         {
             return Spawn(kindId,
