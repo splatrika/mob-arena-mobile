@@ -5,7 +5,7 @@ namespace Splatrika.MobArenaMobile.Factories
 {
     public class WalkingMobServiceFactory : MobServiceFactory<
         WalkingMobService, WalkingMobMonoSettings,
-        WalkingMobSpawnPointMonoSettngs>
+        WalkingMobSpawnPointMonoSettngs, WalkingMobDatabaseSettings>
     {
         public WalkingMobServiceFactory(
             LevelMonoSettings levelMonoSettings,

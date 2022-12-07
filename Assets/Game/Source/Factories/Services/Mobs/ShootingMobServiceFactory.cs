@@ -5,11 +5,11 @@ namespace Splatrika.MobArenaMobile.Factories
 {
     public class ShootingMobServiceFactory : MobServiceFactory<
         ShootingMobService, ShootingMobMonoSettings,
-        ShootingMobSpawnPointMonoSettings>
+        ShootingMobSpawnPointMonoSettings, ShootingMobDatabaseSettings>
     {
         public ShootingMobServiceFactory(
             LevelMonoSettings levelMonoSettings,
-            WalkingMobDatabaseSettings kindsDatabase,
+            ShootingMobDatabaseSettings kindsDatabase,
             DiContainer container) :
             base(levelMonoSettings, kindsDatabase, container)
         {

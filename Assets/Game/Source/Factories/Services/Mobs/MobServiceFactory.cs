@@ -7,15 +7,17 @@ using Zenject;
 
 namespace Splatrika.MobArenaMobile.Factories
 {
-    public abstract class MobServiceFactory<TService, TPresenter, TSpawnPoint>
+    public abstract class MobServiceFactory<TService, TPresenter, TSpawnPoint,
+        TDatabase>
         : IFactory<TService>
         where TSpawnPoint : MobSpawnPointMonoSettings
         where TPresenter : MonoBehaviour
+        where TDatabase : MobKindDatabaseSettings<TPresenter>
     {
         protected DiContainer Container { get; }
 
         private readonly LevelMonoSettings _levelMonoSettings;
-        private readonly WalkingMobDatabaseSettings _kindsDatabase;
+        private readonly TDatabase _kindsDatabase;
 
         protected abstract TService CreateService(
             SpawnObjectServiceConfiguration<TPresenter> configuration);
@@ -23,7 +25,7 @@ namespace Splatrika.MobArenaMobile.Factories
 
         public MobServiceFactory(
             LevelMonoSettings levelMonoSettings,
-            WalkingMobDatabaseSettings kindsDatabase,
+            TDatabase kindsDatabase,
             DiContainer container)
         {
             _levelMonoSettings = levelMonoSettings;
