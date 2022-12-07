@@ -16,6 +16,9 @@ namespace Splatrika.MobArenaMobile.Presenter
         private WalkingPresenter _walkingPresenter;
 
         [SerializeField]
+        private DamageablePresenter _damageablePresenter;
+
+        [SerializeField]
         private Animator _animator;
 
         object IPresenter.Model => Model;
@@ -39,6 +42,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
             Model.Deactivated += OnDestroy;
             _walkingPresenter.Init(Model, _animator, transform);
+            _damageablePresenter.Init(Model, _animator);
             OnInit();
         }
 
@@ -56,6 +60,7 @@ namespace Splatrika.MobArenaMobile.Presenter
             {
                 Model.Deactivated -= OnDestroy;
                 _walkingPresenter.Dispose();
+                _damageablePresenter.Dispose();
                 OnDispose();
                 Model = null;
             }
