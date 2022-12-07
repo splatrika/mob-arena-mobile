@@ -62,6 +62,10 @@ namespace Splatrika.MobArenaMobile.Startup
                 .FromFactory<WalkingMobService, WalkingMobServiceFactory>()
                 .AsSingle();
 
+            Container.BindInterfacesAndSelfTo<ShootingMobService>()
+                .FromFactory<ShootingMobService, ShootingMobServiceFactory>()
+                .AsSingle();
+
             Container.Bind<NavigationConfiguration>()
                 .FromFactory<NavigationConfigurationFactory>()
                 .AsSingle();
