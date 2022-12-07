@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Splatrika.MobArenaMobile.Presenter
 {
     [Serializable]
-    public class WalkingPresenter : IDisposable
+    public class WalkingPresenter : IDisposable, IUpdatable
     {
         public bool Inited { get; private set; }
 
@@ -44,6 +44,12 @@ namespace Splatrika.MobArenaMobile.Presenter
             OnDirectionUpdated(_model.Direction);
 
             Inited = true;
+        }
+
+
+        public void Update(float deltaTime)
+        {
+            _transform.position = _model.Position;
         }
 
 

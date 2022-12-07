@@ -22,6 +22,7 @@ namespace Splatrika.MobArenaMobile.Presenter
 
         protected abstract void OnInit();
         protected abstract void OnDispose();
+        protected virtual void OnUpdate() { }
 
 
         public void Init(TMob mob)
@@ -39,6 +40,13 @@ namespace Splatrika.MobArenaMobile.Presenter
             Model.Deactivated += OnDestroy;
             _walkingPresenter.Init(Model, _animator, transform);
             OnInit();
+        }
+
+
+        private void Update()
+        {
+            _walkingPresenter.Update(Time.deltaTime);
+            OnUpdate();
         }
 
 

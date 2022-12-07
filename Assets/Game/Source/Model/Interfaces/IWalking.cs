@@ -7,6 +7,7 @@ namespace Splatrika.MobArenaMobile.Model
     {
         bool IsWalking { get; }
         Vector3 Direction { get; }
+        Vector3 Position { get; }
 
         event Action MovementStarted;
         event Action MovementStopped;
