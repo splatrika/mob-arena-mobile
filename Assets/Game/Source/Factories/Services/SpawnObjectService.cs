@@ -9,7 +9,7 @@ namespace Splatrika.MobArenaMobile.Factories
 {
     public abstract class
         SpawnObjectService<TPresenter, TModel, TConfiguration, TSpawnArgs>
-        : IDisposable
+        : IDisposable, IUpdatable, IFixedUpdatable
         where TModel : IReusable<TConfiguration>
         where TPresenter : MonoBehaviour
     {
@@ -65,7 +65,25 @@ namespace Splatrika.MobArenaMobile.Factories
         }
 
 
-        private class Handler : IDisposable
+        public void FixedUpdate(float deltaTime)
+        {
+            for (int i = 0; i < _handlers.Count; i++)
+            {
+                _handlers[i].FixedUpdate(deltaTime);
+            }
+        }
+
+
+        public void Update(float deltaTime)
+        {
+            for (int i = 0; i < _handlers.Count; i++)
+            {
+                _handlers[i].Update(deltaTime);
+            }
+        }
+
+
+        private class Handler : IDisposable, IUpdatable, IFixedUpdatable
         {
             public bool Busy { get; private set; }
 
@@ -99,23 +117,40 @@ namespace Splatrika.MobArenaMobile.Factories
             }
 
 
-            private void OnDeactivated()
-            {
-                _presenterPool.Return(_kindId, _presenter);
-                _modelPool.Return(_model);
-                _model = default;
-                _presenter = default;
-                _model.Deactivated -= OnDeactivated;
-                Busy = false;
-            }
-
-
             public void Dispose()
             {
                 if (Busy)
                 {
                     OnDeactivated();
                 }
+            }
+
+            public void FixedUpdate(float deltaTime)
+            {
+                if (Busy && _model is IFixedUpdatable updatable)
+                {
+                    updatable.FixedUpdate(deltaTime);
+                }
+            }
+
+
+            public void Update(float deltaTime)
+            {
+                if (Busy && _model is IUpdatable updatable)
+                {
+                    updatable.Update(deltaTime);
+                }
+            }
+
+
+            private void OnDeactivated()
+            {
+                _presenterPool.Return(_kindId, _presenter);
+                _modelPool.Return(_model);
+                _model.Deactivated -= OnDeactivated;
+                _model = default;
+                _presenter = default;
+                Busy = false;
             }
         }
     }
