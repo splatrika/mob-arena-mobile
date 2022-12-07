@@ -16,6 +16,7 @@ namespace Splatrika.MobArenaMobile.Factories
         {
         }
 
+
         public IDamageable Spawn(int kindId, Vector3 position,
             Vector3 shootingPosition)
         {
@@ -31,6 +32,7 @@ namespace Splatrika.MobArenaMobile.Factories
                 health: presenter.Health,
                 position: spawnArgs.Position,
                 rewardPoints: presenter.RewardPoints,
+                walkingRegenerationTime: presenter.MovementRegenerationTime,
                 speed: presenter.MovementSpeed,
                 bulletsSpeed: presenter.BulletsSpeed,
                 bulletsDamage: presenter.BulletsDamage,

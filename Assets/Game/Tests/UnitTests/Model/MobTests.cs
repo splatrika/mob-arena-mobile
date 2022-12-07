@@ -51,7 +51,8 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _configuration = new MobConfiguration(
                 health: 5,
                 position: new Vector3(2, -4.2f),
-                rewardPoints: 12);
+                rewardPoints: 12,
+                walkingRegenerationTime: 2);
             var logger = new Mock<ILogger>().Object;
 
             _mob = new TestMob(_followingMock.Object, _attackingMock.Object,

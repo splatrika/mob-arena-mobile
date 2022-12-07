@@ -13,11 +13,12 @@ namespace Splatrika.MobArenaMobile.Model
             int health,
             Vector3 position,
             int rewardPoints,
+            float walkingRegenerationTime,
             float speed,
             float attackDistance,
             int damage,
             float attackRegenerationTime)
-            : base(health, position, rewardPoints)
+            : base(health, position, rewardPoints, walkingRegenerationTime)
         {
             Speed = speed;
             AttackDistance = attackDistance;

@@ -7,13 +7,19 @@ namespace Splatrika.MobArenaMobile.Model
         public int Health;
         public Vector3 Position;
         public int RewardPoints;
+        public float WalkingRegenerationTime;
 
 
-        public MobConfiguration(int health, Vector3 position, int rewardPoints)
+        public MobConfiguration(
+            int health,
+            Vector3 position,
+            int rewardPoints,
+            float walkingRegenerationTime)
         {
             Health = health;
             Position = position;
             RewardPoints = rewardPoints;
+            WalkingRegenerationTime = walkingRegenerationTime;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Splatrika.MobArenaMobile.Factories
                 health: presenter.Health,
                 position: spawnArgs.Position,
                 rewardPoints: presenter.RewardPoints,
+                walkingRegenerationTime: presenter.WalkingRegenerationTime,
                 speed: presenter.Speed,
                 attackDistance: presenter.AttackDistance,
                 damage: presenter.AttackDamage,
