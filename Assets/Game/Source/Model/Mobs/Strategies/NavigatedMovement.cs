@@ -67,7 +67,7 @@ namespace Splatrika.MobArenaMobile.Model
             if (!_service.TryGetPath(_position, target, _pathBuffer,
                 out _points))
             {
-                _logger.LogWarning(nameof(NavigationPartial),
+                _logger.LogWarning(nameof(NavigatedMovement),
                     "There is no way to go after target");
                 return;
             }
