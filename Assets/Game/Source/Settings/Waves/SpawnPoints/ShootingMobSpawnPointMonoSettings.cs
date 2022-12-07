@@ -11,9 +11,6 @@ namespace Splatrika.MobArenaMobile.Settings
         [SerializeField]
         private Transform _shootingPosition;
 
-        [SerializeField]
-        private int _mobKind;
-
 
         public override void DrawGizmos()
         {
@@ -36,7 +33,7 @@ namespace Splatrika.MobArenaMobile.Settings
         public override MobSpawnPoint GetSpawnPoint(DiContainer container)
         {
             var service = container.Resolve<IShootingMobService>();
-            return new ShootingMobSpawnPoint(SpawnTime, _mobKind,
+            return new ShootingMobSpawnPoint(SpawnTime, MobKind,
                 transform.position, _shootingPosition.position,
                 service);
         }

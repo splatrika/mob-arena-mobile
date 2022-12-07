@@ -6,10 +6,6 @@ namespace Splatrika.MobArenaMobile.Settings
 {
     public class WalkingMobSpawnPointMonoSettngs : MobSpawnPointMonoSettings
     {
-        [SerializeField]
-        private int _mobKind;
-
-
         public override void DrawGizmos()
         {
             Gizmos.color = Color.blue;
@@ -20,7 +16,7 @@ namespace Splatrika.MobArenaMobile.Settings
         public override MobSpawnPoint GetSpawnPoint(DiContainer container)
         {
             var service = container.Resolve<IWalkingMobService>();
-            return new WalkingMobSpawnPoint(SpawnTime, _mobKind,
+            return new WalkingMobSpawnPoint(SpawnTime, MobKind,
                 transform.position, service);
         }
     }
