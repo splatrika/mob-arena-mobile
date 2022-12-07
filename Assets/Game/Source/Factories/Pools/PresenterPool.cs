@@ -12,11 +12,17 @@ namespace Splatrika.MobArenaMobile.Factories
 
         public PresenterPool(IEnumerable<KindConfiguration<T>> configuration)
         {
+            _kindPools = new Dictionary<int, KindCollections>();
             foreach (var kind in configuration)
             {
                 var collections = new KindCollections(kind.PoolSize);
                 for (int i = 0; i < kind.PoolSize; i++)
                 {
+                    if (!kind.Prefab)
+                    {
+                        throw new InvalidOperationException(
+                            $"Prefab is invalid (id: {kind.KindId})");
+                    }
                     var instance = GameObject.Instantiate(kind.Prefab);
                     instance.gameObject.SetActive(false);
                     collections.Pool.Enqueue(instance);
@@ -53,8 +59,8 @@ namespace Splatrika.MobArenaMobile.Factories
             if (!pool.TryDequeue(out T instance))
             {
                 throw new InvalidOperationException("There is no free items");
-
             }
+            instance.gameObject.SetActive(true);
             return instance;
         }
 
