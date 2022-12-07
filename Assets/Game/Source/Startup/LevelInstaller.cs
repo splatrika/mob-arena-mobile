@@ -57,6 +57,10 @@ namespace Splatrika.MobArenaMobile.Startup
             Container.BindInterfacesTo<ScoreService>()
                 .AsSingle()
                 .NonLazy();
+
+            Container.Bind<NavigationConfiguration>()
+                .FromFactory<NavigationConfigurationFactory>()
+                .AsSingle();
         }
 
 
