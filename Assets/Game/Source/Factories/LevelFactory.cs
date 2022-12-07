@@ -30,16 +30,16 @@ namespace Splatrika.MobArenaMobile.Factories
 
         public Level Create()
         {
-            var settings = GameObject.FindObjectOfType<LevelMonoSettings>();
-            if (!settings)
+            var levelSettings = GameObject.FindObjectOfType<LevelMonoSettings>();
+            if (!levelSettings)
             {
                 throw new NullReferenceException(
                     "There is no LevelMonoSettings found on the scene");
             }
 
-            var wavesSettings = GameObject.FindObjectsOfType<WaveMonoSettings>();
-            var waves = new WaveConfiguration[wavesSettings.Length];
-            for (int i = 0; i < wavesSettings.Length; i++)
+            var wavesSettings = levelSettings.Waves;
+            var waves = new WaveConfiguration[wavesSettings.Count];
+            for (int i = 0; i < wavesSettings.Count; i++)
             {
                 var item = wavesSettings[i];
                 var spawnPoints = item.GetSpawnPoints()
@@ -49,7 +49,7 @@ namespace Splatrika.MobArenaMobile.Factories
             }
 
             var configuration = new LevelConfiguration(
-                waves, settings.TimeScaleAcceleration);
+                waves, levelSettings.TimeScaleAcceleration);
 
             return new Level(configuration, _playerCharacter,
                 _timeScaleService);
