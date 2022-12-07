@@ -51,6 +51,7 @@ namespace Splatrika.MobArenaMobile.Model
         private void Attack()
         {
             _target.Damage(this);
+            Attacked?.Invoke();
         }
     }
 }
