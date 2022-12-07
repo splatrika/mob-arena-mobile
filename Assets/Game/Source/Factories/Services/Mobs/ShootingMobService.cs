@@ -1,3 +1,4 @@
+using System;
 using Splatrika.MobArenaMobile.Model;
 using Splatrika.MobArenaMobile.Settings;
 using UnityEngine;
@@ -5,7 +6,7 @@ using Zenject;
 
 namespace Splatrika.MobArenaMobile.Factories
 {
-    public class ShootingMobService : SpawnObjectService<ShootingMobMonoSettings,
+    public class ShootingMobService : MobService<ShootingMobMonoSettings,
         ShootingMob, ShootingMobConfiguration, ShootingMobSpawnArgs>,
         IShootingMobService
     {

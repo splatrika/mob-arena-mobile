@@ -1,3 +1,4 @@
+using System;
 using Splatrika.MobArenaMobile.Model;
 using Splatrika.MobArenaMobile.Settings;
 using UnityEngine;
@@ -5,10 +6,15 @@ using Zenject;
 
 namespace Splatrika.MobArenaMobile.Factories
 {
-    public class WalkingMobService : SpawnObjectService<WalkingMobMonoSettings,
+    public class WalkingMobService : MobService<WalkingMobMonoSettings,
         WalkingMob, WalkingMobConfiguration, WalkingMobSpawnArgs>,
-        IWalkingMobService
+        IWalkingMobService, IEnemy
     {
+        public int RewardPoints => throw new NotImplementedException();
+
+        public event Action<IEnemy> Died;
+
+
         public WalkingMobService(
             SpawnObjectServiceConfiguration<WalkingMobMonoSettings> configuration,
             DiContainer container)

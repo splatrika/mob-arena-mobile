@@ -20,6 +20,9 @@ namespace Splatrika.MobArenaMobile.Factories
         protected abstract TConfiguration BindConfiguration(
             TPresenter presenter, TSpawnArgs spawnArgs);
         protected abstract void InitPrefab(TModel model, TPresenter presenter);
+        protected virtual void OnDisposed() { }
+        protected virtual void OnActivated(TModel model) { }
+        protected virtual void OnDeactivated(TModel model) { }
 
 
         public SpawnObjectService(
@@ -32,7 +35,8 @@ namespace Splatrika.MobArenaMobile.Factories
             _handlers = new List<Handler>(configuration.ModelPool.PoolSize);
             for (int i = 0; i < configuration.ModelPool.PoolSize; i++)
             {
-                _handlers.Add(new Handler(_presenterPool, _modelPool));
+                _handlers.Add(new Handler(_presenterPool, _modelPool,
+                    deactivated => OnDeactivated(deactivated)));
             }
         }
         
@@ -54,6 +58,7 @@ namespace Splatrika.MobArenaMobile.Factories
             model.Start(configuration);
             InitPrefab(model, presenter);
 
+            OnActivated(model);
             return model;
         }
 
@@ -62,6 +67,7 @@ namespace Splatrika.MobArenaMobile.Factories
         {
             _modelPool.Dispose();
             _presenterPool.Dispose();
+            OnDisposed();
         }
 
 
@@ -92,14 +98,17 @@ namespace Splatrika.MobArenaMobile.Factories
             private TPresenter _presenter;
             private readonly IPresenterPool<TPresenter> _presenterPool;
             private readonly IModelPool<TModel> _modelPool;
+            private readonly Action<TModel> _deactivatedCallback;
 
 
             public Handler(
                 IPresenterPool<TPresenter> presenterPool,
-                IModelPool<TModel> modelPool)
+                IModelPool<TModel> modelPool,
+                Action<TModel> deactivatedCallback)
             {
                 _presenterPool = presenterPool;
                 _modelPool = modelPool;
+                _deactivatedCallback = deactivatedCallback;
             }
 
 
@@ -148,9 +157,11 @@ namespace Splatrika.MobArenaMobile.Factories
                 _presenterPool.Return(_kindId, _presenter);
                 _modelPool.Return(_model);
                 _model.Deactivated -= OnDeactivated;
+                var model = _model;
                 _model = default;
                 _presenter = default;
                 Busy = false;
+                _deactivatedCallback.Invoke(model);
             }
         }
     }
