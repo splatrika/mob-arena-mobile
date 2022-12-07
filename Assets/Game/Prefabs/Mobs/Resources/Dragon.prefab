@@ -45,7 +45,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1533898445984858979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9456553f980d440f6be2273611b5b972, type: 3}
+  m_Script: {fileID: 11500000, guid: 62a9216ae828045789ad256a95af0b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 6
@@ -65,16 +65,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1533898445984858979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c4443f8e3b4417cb8aa276ccbf35d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 797081b9e4fe54e848808dffbec2a278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _walkingPresenter:
+    _idleState: Idle
+    _walkingState: Fly
+  _damageablePresenter:
+    _damagedState: Damaged
+    _diedState: Died
   _animator: {fileID: 8833576210594044912}
-  _idleState: Idle
-  _movementState: Fly
-  _takeGunState: 
-  _shootState: Shot
-  _damagedState: Damaged
-  _diedState: Died
+  _shootingPresenter:
+    _gunTakenState: 
+    _shotState: Shot
+    _gunHidenState: 
 --- !u!54 &2611776694766113915
 Rigidbody:
   m_ObjectHideFlags: 0
