@@ -2,35 +2,28 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class WalkingMobConfiguration
+    public class WalkingMobConfiguration : MobConfiguration
     {
-        public Vector3 StartPoint;
         public float Speed;
-        public float AtackDistance;
-        public float AtackRegenerationTime;
-        public int AtackDamage;
-        public int Health;
-        public float WalkingRegenerationTime;
-        public int RewardPoints;
+        public float AttackDistance;
+        public int Damage;
+        public float AttackRegenerationTime;
 
         public WalkingMobConfiguration(
-            Vector3 startPoint,
-            float speed,
-            float atackDistance,
-            float atackRegenerationTime,
-            int atackDamage,
             int health,
+            Vector3 position,
+            int rewardPoints,
             float walkingRegenerationTime,
-            int rewardPoints)
+            float speed,
+            float attackDistance,
+            int damage,
+            float attackRegenerationTime)
+            : base(health, position, rewardPoints, walkingRegenerationTime)
         {
-            StartPoint = startPoint;
             Speed = speed;
-            AtackDistance = atackDistance;
-            AtackRegenerationTime = atackRegenerationTime;
-            AtackDamage = atackDamage;
-            Health = health;
-            WalkingRegenerationTime = walkingRegenerationTime;
-            RewardPoints = rewardPoints;
+            AttackDistance = attackDistance;
+            Damage = damage;
+            AttackRegenerationTime = attackRegenerationTime;
         }
     }
 }

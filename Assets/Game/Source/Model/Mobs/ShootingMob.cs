@@ -3,167 +3,78 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class ShootingMob : IReusable<ShootingMobConfiguration>,
-        IUpdatable, IDamagable, IHealth, IEnemy
+    public class ShootingMob : Mob<ShootingMobConfiguration>, IShooting
     {
-        public Vector3 Position => _following.Position;
-        public bool Active { get; private set; }
-        public bool IsDied => _damagable.IsDied;
-        public int Health => _damagable.Health;
-        public float BulletsSpeed { get; private set; }
-        public int BulletsDamage { get; private set; }
-        public IPositionProvider ShotPoint { get; private set; }
-        public bool IsMoving => _following.IsMoving;
-        public int RewardPoints { get; private set; }
+        public bool IsGunTaken
+            => ((ShootingStrategy)AttackingStrategy).IsGunTaken;
 
-        private readonly IDamagablePartial _damagable;
-        private readonly IFollowingPartial _following;
-        private readonly IBulletService _bulletService;
-        private readonly ITimeScaleService _timeScaleService;
         private readonly IPlayerCharacter _playerCharacter;
-        private readonly RegeneratableAction _shooting;
-        private Action<IEnemy> _enemyDied;
 
-        public event Action Started;
-        public event Action Died;
-        public event Action<int> HealthUpdated;
-        public event Action Damaged;
-        public event Action MovementStarted;
-        public event Action MovementStopped;
-        public event Action<Vector3> DirectionUpdated;
-        public event Action ShootingStarted;
-        public event Action Shot;
-        public event Action Activated;
-        public event Action Deactivated;
-        event Action<IEnemy> IEnemy.Died
-        {
-            add => _enemyDied += value;
-            remove => _enemyDied -= value;
-        }
-
+        public event Action GunTaken;
+        public event IShooting.ShotAction Shot;
+        public event Action GunHidden;
 
 
         public ShootingMob(
-            IDamagablePartial damagable,
-            IFollowingPartial following,
-            IBulletService bulletService,
+            ILogger logger,
+            NavigationConfiguration navigationConfiguration,
+            INavigationService navigationService,
             ITimeScaleService timeScaleService,
+            IBulletService bulletService,
             IPlayerCharacter playerCharacter)
+            : base(
+                new GoToPointStrategy(navigationConfiguration,
+                    navigationService, logger, timeScaleService),
+                new ShootingStrategy(bulletService, timeScaleService),
+                logger)
         {
-            _damagable = damagable;
-            _following = following;
-            _bulletService = bulletService;
-            _timeScaleService = timeScaleService;
             _playerCharacter = playerCharacter;
 
-            _shooting = new RegeneratableAction(
-                regenerationTime: 0,
-                action: Shoot,
-                timeScaleService: _timeScaleService);
-
-            _damagable.Died += OnDied;
-            _damagable.HealthUpdated += x => HealthUpdated?.Invoke(x);
-            _damagable.Damaged += OnDamaged;
-
-            _following.MovementStarted += () => MovementStarted?.Invoke();
-            _following.MovementStopped += () => MovementStopped?.Invoke();
-            _following.DirectionUpdated += x => DirectionUpdated?.Invoke(x);
-            _following.Arrived += OnArrived;
+            ((ShootingStrategy)AttackingStrategy).GunTaken += OnGunTaken;
+            ((ShootingStrategy)AttackingStrategy).Shot += OnShot;
+            ((ShootingStrategy)AttackingStrategy).GunHidden += OnGunHidden;
         }
 
 
-        public void Start(ShootingMobConfiguration configuration)
+        protected override void OnStart(
+            ShootingMobConfiguration configuration,
+            IFollowingStrategy following,
+            IAttackingStrategy attacking)
         {
-            if (Active)
-            {
-                throw new InvalidOperationException("Already active");
-            }
+            var gunTarget = new PositionAdapter(() => _playerCharacter.Center);
 
-            _shooting.Reset(configuration.GunRegenerationTime);
-
-            var damagableConfiguration = new DamagableConfiguration(
-                lifes: configuration.Health,
-                allowedDamagers: damager => damager is IFriendBullet);
-            _damagable.Setup(damagableConfiguration);
-
-            var followingConfiguration = new FollowingConfiguration(
-                startPoint: configuration.Start,
-                followTarget: configuration.ShootingPosition,
-                minDistance: 0,
-                speed: configuration.MovementSpeed,
-                regenerationTime: configuration.MovementRegenerationTime);
-            _following.Start(followingConfiguration);
-
-            BulletsSpeed = configuration.BulletsSpeed;
-            BulletsDamage = configuration.BulletsDamage;
-            ShotPoint = configuration.ShotPoint;
-            RewardPoints = configuration.RewardPoints;
-
-            Active = true;
-            Started?.Invoke();
-            Activated?.Invoke();
+            ((GoToPointStrategy)following)
+                .Setup(configuration.ShootingPosition, configuration.Speed);
+            ((ShootingStrategy)attacking)
+                .Setup(configuration.BulletsDamage, configuration.BulletsSpeed,
+                configuration.ShotPoint, gunTarget,
+                configuration.GunRegenerationTime);
         }
 
 
-        public void Damage(IDamager damager)
+        protected override void OnDispose()
         {
-            _damagable.Damage(damager);
+            ((ShootingStrategy)AttackingStrategy).GunTaken -= OnGunTaken;
+            ((ShootingStrategy)AttackingStrategy).Shot -= OnShot;
+            ((ShootingStrategy)AttackingStrategy).GunHidden -= OnGunHidden;
         }
 
 
-        public void Update(float deltaTime)
+        private void OnGunTaken()
         {
-            if (!Active)
-            {
-                return;
-            }
-            _shooting.Update(deltaTime);
-            _following.Update(deltaTime);
+            GunTaken?.Invoke();
         }
 
 
-        private void OnDamaged()
+        private void OnShot(Vector3 direction)
         {
-            _following.Hit();
-            Damaged?.Invoke();
+            Shot?.Invoke(direction);
         }
 
 
-        private void OnDied()
+        private void OnGunHidden()
         {
-            Active = false;
-            Died?.Invoke();
-            _enemyDied?.Invoke(this);
-            Deactivated?.Invoke();
-        }
-
-
-        private void OnArrived()
-        {
-            _shooting.Start();
-            var directionToPlayer = _playerCharacter.Center - Position;
-            directionToPlayer.y = 0;
-            DirectionUpdated?.Invoke(directionToPlayer.normalized);
-            ShootingStarted?.Invoke();
-        }
-
-
-        private void Shoot()
-        {
-            var shotPoint = ShotPoint.Position;
-            var playerCenter = _playerCharacter.Position
-                + _playerCharacter.CenterOffset;
-            var directionToPlayer = playerCenter - shotPoint;
-
-            var configuration = new BulletConfiguration(
-                position: shotPoint,
-                direction: directionToPlayer,
-                speed: BulletsSpeed,
-                damage: BulletsDamage);
-
-            _bulletService.Spawn(configuration);
-
-            Shot?.Invoke();
+            GunHidden?.Invoke();
         }
     }
 }

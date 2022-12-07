@@ -4,6 +4,6 @@ namespace Splatrika.MobArenaMobile.Model
 {
     public interface IShootingMobService
     {
-        IHealth Spawn(int kindId, Vector3 position, Vector3 shootingPosition);
+        IDamageable Spawn(int kindId, Vector3 position, Vector3 shootingPosition);
     }
 }

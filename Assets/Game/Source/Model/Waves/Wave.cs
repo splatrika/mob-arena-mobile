@@ -79,7 +79,7 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        private void RegisterMob(IHealth mob)
+        private void RegisterMob(IDamageable mob)
         {
             for (int i = 0; i < _mobHalders.Length; i++)
             {
@@ -118,7 +118,7 @@ namespace Splatrika.MobArenaMobile.Model
             public bool IsFree => _registered == null;
 
             private readonly Action _diedCallback;
-            private IHealth _registered;
+            private IDamageable _registered;
 
 
             public MobDieHandler(
@@ -137,7 +137,7 @@ namespace Splatrika.MobArenaMobile.Model
             }
 
 
-            public void Register(IHealth health)
+            public void Register(IDamageable health)
             {
                 if (!IsFree)
                 {

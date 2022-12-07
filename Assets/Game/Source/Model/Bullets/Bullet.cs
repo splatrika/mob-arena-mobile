@@ -79,11 +79,11 @@ namespace Splatrika.MobArenaMobile.Model
             if (_raycastService.Raycast(from, to, _layerMask,
                 out object hitted))
             {
-                if (hitted is IDamagable damagable)
+                if (hitted is IDamageable damageable)
                 {
-                    damagable.Damage(this);
+                    damageable.Damage(this);
                 }
-                if (hitted is IDamagable || hitted is ILevelEnvironment)
+                if (hitted is IDamageable || hitted is ILevelEnvironment)
                 {
                     Deactivate();
                 }

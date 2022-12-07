@@ -2,42 +2,35 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public struct ShootingMobConfiguration
+    public class ShootingMobConfiguration : MobConfiguration
     {
-        public int Health;
+        public float Speed;
+        public Vector3 ShootingPosition;
+        public IPositionProvider ShotPoint;
         public float BulletsSpeed;
         public int BulletsDamage;
         public float GunRegenerationTime;
-        public Vector3 Start;
-        public float MovementSpeed;
-        public float MovementRegenerationTime;
-        public Vector3 ShootingPosition;
-        public IPositionProvider ShotPoint;
-        public int RewardPoints;
 
 
         public ShootingMobConfiguration(
             int health,
+            Vector3 position,
+            int rewardPoints,
+            float walkingRegenerationTime,
+            float speed,
             float bulletsSpeed,
             int bulletsDamage,
             float gunRegenerationTime,
-            Vector3 start,
-            float movementSpeed,
-            float movementRegenerationTime,
-            Vector3 shootingPosition,
             IPositionProvider shotPoint,
-            int rewardPoints)
+            Vector3 shootingPosition)
+            : base(health, position, rewardPoints, walkingRegenerationTime)
         {
-            Health = health;
+            Speed = speed;
             BulletsSpeed = bulletsSpeed;
             BulletsDamage = bulletsDamage;
             GunRegenerationTime = gunRegenerationTime;
-            Start = start;
-            MovementSpeed = movementSpeed;
-            MovementRegenerationTime = movementRegenerationTime;
-            ShootingPosition = shootingPosition;
             ShotPoint = shotPoint;
-            RewardPoints = rewardPoints;
+            ShootingPosition = shootingPosition;
         }
     }
 }

@@ -40,14 +40,14 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
 
         [Test]
-        public void ShouldAtackDamager()
+        public void ShouldAttackDamager()
         {
             _bullet.Start(_configuration);
 
-            var damagableMock = new Mock<IDamagable>();
-            var damagable = (object)damagableMock.Object;
+            var damageableMock = new Mock<IDamageable>();
+            var damageable = (object)damageableMock.Object;
             IDamager damager = null;
-            damagableMock.Setup(x => x.Damage(It.IsAny<IDamager>()))
+            damageableMock.Setup(x => x.Damage(It.IsAny<IDamager>()))
                 .Callback((IDamager x) => damager = x);
 
             var lastPosition = _bullet.Position;
@@ -55,7 +55,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             var position = _bullet.Position;
             _raycastServiceMock
                 .Setup(x => x.Raycast(lastPosition, position, _layerMask,
-                    out damagable))
+                    out damageable))
                 .Returns(true);
             _bullet.FixedUpdate(1);
 
@@ -112,7 +112,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         [Test]
         public void ShouldBeDeactivatedOnHit()
         {
-            var damagable = (object)new Mock<IDamagable>().Object;
+            var damageable = (object)new Mock<IDamageable>().Object;
 
             var deactivated = false;
             _bullet.Deactivated += () => deactivated = true;
@@ -120,7 +120,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             _bullet.Start(_configuration);
             _raycastServiceMock
                 .Setup(x => x.Raycast(It.IsAny<Vector3>(), It.IsAny<Vector3>(),
-                    It.IsAny<int>(), out damagable))
+                    It.IsAny<int>(), out damageable))
                 .Returns(true);
             _bullet.Update(1);
             _bullet.FixedUpdate(1);

@@ -12,10 +12,10 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
         private PlayerCharacter _playerCharacter;
         private PlayerCharacterConfiguration _configuration;
-        private DamagableConfiguration _damagableConfiguration;
+        private DamageableConfiguration _damageableConfiguration;
         private Mock<IFriendBulletService> _friendBulletServiceMock;
         private Mock<ITimeScaleService> _timeScaleServiceMock;
-        private Mock<IDamagablePartial> _damagablePartialMock;
+        private Mock<IDamageablePartial> _damageablePartialMock;
 
 
         [SetUp]
@@ -23,15 +23,15 @@ namespace Splatrika.MobArenaMobile.UnitTests
         {
             _friendBulletServiceMock = new Mock<IFriendBulletService>();
             _timeScaleServiceMock = new Mock<ITimeScaleService>();
-            _damagablePartialMock = new Mock<IDamagablePartial>();
+            _damageablePartialMock = new Mock<IDamageablePartial>();
 
             _timeScaleServiceMock.SetupGet(x => x.TimeScale)
                 .Returns(1);
 
-            _damagablePartialMock
-                .Setup(x => x.Setup(It.IsAny<DamagableConfiguration>()))
-                .Callback((DamagableConfiguration configuration) =>
-                    _damagableConfiguration = configuration);
+            _damageablePartialMock
+                .Setup(x => x.Setup(It.IsAny<DamageableConfiguration>()))
+                .Callback((DamageableConfiguration configuration) =>
+                    _damageableConfiguration = configuration);
 
             _configuration = new PlayerCharacterConfiguration(
                 health: Health,
@@ -45,21 +45,21 @@ namespace Splatrika.MobArenaMobile.UnitTests
                 _friendBulletServiceMock.Object,
                 _timeScaleServiceMock.Object,
                 new Mock<ILogger>().Object,
-                _damagablePartialMock.Object);
+                _damageablePartialMock.Object);
         }
 
 
         [Test]
-        public void ShouldSetupDamagable()
+        public void ShouldSetupDamageable()
         {
             var anotherDamager = new Mock<IDamager>().Object;
             var friendBullet = new Mock<IFriendBullet>().Object;
 
             Assert.AreEqual(_configuration.Health,
-                _damagableConfiguration.Health);
-            Assert.True(_damagableConfiguration
+                _damageableConfiguration.Health);
+            Assert.True(_damageableConfiguration
                 .AllowedDamagers.Invoke(anotherDamager));
-            Assert.False(_damagableConfiguration
+            Assert.False(_damageableConfiguration
                 .AllowedDamagers.Invoke(friendBullet));
         }
 
@@ -183,7 +183,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
         {
             var died = false;
             _playerCharacter.Died += () => died = true;
-            _damagablePartialMock.Raise(x => x.Died += null);
+            _damageablePartialMock.Raise(x => x.Died += null);
 
             Assert.True(died);
         }
@@ -195,7 +195,7 @@ namespace Splatrika.MobArenaMobile.UnitTests
             int? health = null;
             _playerCharacter.HealthUpdated += x => health = x;
             int exceptedHealth = 23;
-            _damagablePartialMock.Raise(x => x.HealthUpdated += null,
+            _damageablePartialMock.Raise(x => x.HealthUpdated += null,
                 exceptedHealth);
 
             Assert.NotNull(health);
@@ -231,9 +231,9 @@ namespace Splatrika.MobArenaMobile.UnitTests
 
         private void KillCharacter()
         {
-            _damagablePartialMock.SetupGet(x => x.IsDied)
+            _damageablePartialMock.SetupGet(x => x.IsDied)
                 .Returns(true);
-            _damagablePartialMock.Raise(x => x.Died += null);
+            _damageablePartialMock.Raise(x => x.Died += null);
         }
     }
 }
