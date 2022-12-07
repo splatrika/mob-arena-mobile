@@ -48,6 +48,8 @@ namespace Splatrika.MobArenaMobile.Model
             FollowingStrategy.Arrived += OnArrived;
             FollowingStrategy.StartedFollowing += OnStartedFollowing;
             FollowingStrategy.DirectionUpdated += OnDirectionUpdated;
+            FollowingStrategy.Frozen += OnFrozen;
+            FollowingStrategy.Resumed += OnResumed;
             _damageable.Damaged += OnDamaged;
             _damageable.HealthUpdated += OnHealthUpdate;
             _damageable.Died += OnDied;
@@ -61,6 +63,8 @@ namespace Splatrika.MobArenaMobile.Model
             FollowingStrategy.Arrived -= OnArrived;
             FollowingStrategy.StartedFollowing -= OnStartedFollowing;
             FollowingStrategy.DirectionUpdated -= OnDirectionUpdated;
+            FollowingStrategy.Frozen -= OnFrozen;
+            FollowingStrategy.Resumed -= OnResumed;
             _damageable.Damaged -= OnDamaged;
             _damageable.HealthUpdated -= OnHealthUpdate;
             _damageable.Died -= OnDied;
@@ -84,6 +88,8 @@ namespace Splatrika.MobArenaMobile.Model
                 _logger.LogError(GetType().Name, "Already active");
             }
             FollowingStrategy.SetPosition(configuration.Position);
+            FollowingStrategy.SetRegenerationTime(
+                configuration.WalkingRegenerationTime);
             _damageable.Setup(new DamageableConfiguration(
                 lifes: configuration.Health,
                 allowedDamagers: x => x is FriendBullet));
@@ -136,6 +142,7 @@ namespace Splatrika.MobArenaMobile.Model
 
         private void OnDamaged()
         {
+            FollowingStrategy.Hit();
             Damaged?.Invoke();
         }
 
@@ -143,6 +150,18 @@ namespace Splatrika.MobArenaMobile.Model
         private void OnHealthUpdate(int health)
         {
             HealthUpdated?.Invoke(health);
+        }
+
+
+        private void OnFrozen()
+        {
+            MovementStopped?.Invoke();
+        }
+
+
+        private void OnResumed()
+        {
+            MovementStarted?.Invoke();
         }
 
 

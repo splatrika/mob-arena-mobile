@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class GoToPointStrategy : IFollowingStrategy, IDisposable
+    public class GoToPointStrategy : FollowingStrategyBase, IDisposable
     {
-        public Vector3 Position => _movement.Position;
+        public override Vector3 Position => _movement.Position;
 
         private NavigatedMovement _movement;
 
-        public event Action Arrived;
-        public event Action StartedFollowing;
-        public event Action<Vector3> DirectionUpdated;
+        public override event Action Arrived;
+        public override event Action StartedFollowing;
+        public override event Action<Vector3> DirectionUpdated;
 
 
         public GoToPointStrategy(
@@ -44,21 +44,27 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public void SetPosition(Vector3 position)
+        public override sealed void SetPosition(Vector3 position)
         {
             _movement.SetPosition(position);
         }
 
 
-        public void Stop()
+        protected override sealed void OnStop()
         {
             _movement.ClearDestination();
         }
 
 
-        public void Update(float deltaTime)
+        protected override sealed void OnUpdate(float deltaTime)
         {
             _movement.Update(deltaTime);
+        }
+
+
+        protected override bool IsActive()
+        {
+            return _movement.Active;
         }
 
 

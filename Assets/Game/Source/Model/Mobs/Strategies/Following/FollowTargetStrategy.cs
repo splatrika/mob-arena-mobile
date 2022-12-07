@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Splatrika.MobArenaMobile.Model
 {
-    public class FollowTargetStrategy : IFollowingStrategy, IDisposable
+    public class FollowTargetStrategy : FollowingStrategyBase, IDisposable
     {
         public const float CheckTargetFrequency = 1.5f;
-        public Vector3 Position => _movement.Position;
+        public override Vector3 Position => _movement.Position;
 
         private NavigatedMovement _movement;
         private IPositionProvider _target;
         private Vector3 _lastTargetPosition;
         private RegeneratingAction _targetChecking;
 
-        public event Action Arrived;
-        public event Action StartedFollowing;
-        public event Action<Vector3> DirectionUpdated;
+        public override event Action Arrived;
+        public override event Action StartedFollowing;
+        public override event Action<Vector3> DirectionUpdated;
 
 
         public FollowTargetStrategy(
@@ -56,13 +56,13 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public void SetPosition(Vector3 position)
+        public override sealed void SetPosition(Vector3 position)
         {
             _movement.SetPosition(position);
         }
 
 
-        public void Stop()
+        protected override sealed void OnStop()
         {
             _target = null;
             _movement.ClearDestination();
@@ -70,10 +70,16 @@ namespace Splatrika.MobArenaMobile.Model
         }
 
 
-        public void Update(float deltaTime)
+        protected override void OnUpdate(float deltaTime)
         {
             _movement.Update(deltaTime);
             _targetChecking.Update(deltaTime);
+        }
+
+
+        protected override bool IsActive()
+        {
+            return _movement.Active;
         }
 
 
